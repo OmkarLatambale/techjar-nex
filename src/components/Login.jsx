@@ -50,12 +50,13 @@ export default function Login() {
           <input
             type="email"
             placeholder="Email"
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#DFD0B8]"
           />
           <input
             type="password"
             placeholder="Password"
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#DFD0B8
+            ]"
           />
         </div>
 
