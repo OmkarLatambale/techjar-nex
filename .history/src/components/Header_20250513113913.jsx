@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentPath = location.pathname;
   const handleLoginClick = () => {
     navigate("/login");
   };

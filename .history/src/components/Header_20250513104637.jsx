@@ -1,17 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
-
+import Login from "./Login";
+import Jobpost from "./Jobpost";
+import { useNavigate } from "react-router-dom";
 function Header() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const currentPath = location.pathname;
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
-  const handleJobpostClick = () => {
-    navigate("/jobpost");
-  };
+const handleLoginClick = () => {
+    navigate('/login');
   return (
     <>
       <div className="bg-[#222831]  px-6 py-4">
@@ -46,22 +40,14 @@ function Header() {
           </ul>
 
           {/* Buttons */}
-          {currentPath !== "/jobpost" && (
-            <div className="flex gap-4">
-              <button
-                onClick={handleJobpostClick}
-                className="border border-[#948979] px-4 py-2 rounded-md text-[#DFD0B8] hover:bg-[#948979] hover:text-[#393e46] transition cursor-pointer"
-              >
-                Post a Job
-              </button>
-              <button
-                onClick={handleLoginClick}
-                className="border border-[#948979] px-4 py-2 rounded-md text-[#DFD0B8] hover:bg-[#948979] hover:text-[#393e46] transition cursor-pointer"
-              >
-                Login
-              </button>
-            </div>
-          )}
+          <div className="flex gap-4">
+            <button className="border border-[#948979] px-4 py-2 rounded-md text-[#DFD0B8] hover:bg-[#948979] hover:text-[#393e46] transition cursor-pointer">
+              Post a Job
+            </button>
+            <button className="border border-[#948979] px-4 py-2 rounded-md text-[#DFD0B8] hover:bg-[#948979] hover:text-[#393e46] transition cursor-pointer" onClick={handleLoginClick}>
+              Login
+            </button>
+          </div>
         </nav>
       </div>
     </>

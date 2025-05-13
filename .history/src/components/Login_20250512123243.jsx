@@ -1,11 +1,12 @@
-import React from "react";
-import { useState } from "react";
-function Login() {
+import React, { useState } from "react";
+
+export default function Login() {
   const [role, setRole] = useState("vendor");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#1e222a] text-white px-4">
       <div className="w-full max-w-md bg-[#1e222a] p-10 rounded-xl shadow-md space-y-8">
+        
         {/* Logo */}
         <div className="flex justify-center">
           <img
@@ -67,5 +68,3 @@ function Login() {
     </div>
   );
 }
-
-export default Login;
