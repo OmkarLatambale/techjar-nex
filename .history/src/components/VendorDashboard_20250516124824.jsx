@@ -130,7 +130,7 @@ const VendorDashboard = () => {
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-8">
       {/* Header */}
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex  items-center mb-10">
         <div className="flex items-center gap-3">
           <img
             src="/src/assets/botImage.png"
@@ -141,7 +141,7 @@ const VendorDashboard = () => {
         </div>
 
         <button
-          className="border px-4 py-1 rounded-md w-40 cursor-pointer"
+          className="border px-4 py-1 rounded-md"
           onClick={() => navigate("/vendor-jobs")}
         >
           Jobs

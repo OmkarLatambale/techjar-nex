@@ -3,7 +3,7 @@
 
 // const VendorJobInbox = () => {
 //   const { jobs, loading, error } = useJobs();
-//   const [selectedJobId, setSelectedJobId] = useState(null);
+//   const \[selectedJobId, setSelectedJobId] = useState(null);
 
 //   const handleConfirm = (id) => {
 //     alert(`Job ID ${id} confirmed for portal.`);
@@ -34,9 +34,9 @@
 
 //       <div className="grid gap-6">
 //         {jobs.map((job) => (
-//           <div
+//           \<div
 //             key={job.id}
-//             className="bg-[#393e46] text-[#DFD0B8] p-6 rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer"
+//             className="bg-\[#393e46] text-\[#DFD0B8] p-6 rounded-lg shadow-lg hover\:shadow-xl transition cursor-pointer"
 //             onClick={() =>
 //               setSelectedJobId((prev) => (prev === job.id ? null : job.id))
 //             }
@@ -67,30 +67,30 @@
 
 //             {selectedJobId === job.id && (
 //               <div className="flex flex-col sm:flex-row gap-4 mt-6">
-//                 <button
+//                 \<button
 //                   onClick={(e) => {
 //                     e.stopPropagation();
 //                     handleConfirm(job.id);
 //                   }}
-//                   className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md transition"
+//                   className="bg-\[#1e222a] hover\:bg-black text-\[#DFD0B8] px-4 py-2 rounded-md transition"
 //                 >
 //                   Confirm Job
 //                 </button>
-//                 <button
+//                 \<button
 //                   onClick={(e) => {
 //                     e.stopPropagation();
 //                     handleReject(job.id);
 //                   }}
-//                   className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md transition"
+//                   className="bg-\[#1e222a] hover\:bg-black text-\[#DFD0B8] px-4 py-2 rounded-md transition"
 //                 >
 //                   Reject Job
 //                 </button>
-//                 <button
+//                 \<button
 //                   onClick={(e) => {
 //                     e.stopPropagation();
 //                     handleAssign(job.id);
 //                   }}
-//                   className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md transition"
+//                   className="bg-\[#1e222a] hover\:bg-black text-\[#DFD0B8] px-4 py-2 rounded-md transition"
 //                 >
 //                   Assign to Subvendor
 //                 </button>
@@ -104,7 +104,6 @@
 // };
 
 // export default VendorJobInbox;
-
 import React, { useState } from "react";
 
 const jobData = [
@@ -152,17 +151,17 @@ function JobDashboard() {
   return (
     <div className="flex h-screen font-sans">
       {/* Left Panel */}
-      <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
+      <div className="w-1/4 bg-gray-900 text-white p-5 space-y-3 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Job List</h2>
         {jobData.map((job) => (
           <button
             key={job.id}
             onClick={() => setSelectedJob(job)}
-            className={`w-full text-left p-3 rounded-lg transition ${
+            className={w-full text-left p-3 rounded-lg transition ${
               selectedJob.id === job.id
-                ? "bg-[#dfd0b8] text-[#222831]"
+                ? "bg-blue-600"
                 : "bg-gray-800 hover:bg-gray-700"
-            }`}
+            }}
           >
             {job.title}
           </button>
@@ -170,7 +169,7 @@ function JobDashboard() {
       </div>
 
       {/* Right Panel */}
-      <div className="w-3/4 bg-[#dfd0b8] overflow-y-auto p-10 px-15">
+      <div className="w-3/4 bg-[#dfd0b8] overflow-y-auto">
         <h2 className="text-2xl font-bold text-[#222831] mb-2">
           {selectedJob.title}
         </h2>

@@ -105,117 +105,38 @@
 
 // export default VendorJobInbox;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const jobData = [
-  {
-    id: 1,
-    title: "Software Engineer - NexAI",
-    ctc: "6 LPA",
-    overview: "Exciting opportunity to work with AI-powered platforms.",
-    description:
-      "You will be working on cutting-edge technologies to automate interviews using AI. You’ll collaborate with cross-functional teams and vendors.",
-    criteria: "Minimum 60% in 10th, 12th, and Graduation. No active backlogs.",
-    eligibleCourses: "B.E / B.Tech (CSE, IT, ECE), MCA",
-    location: "Bangalore, India",
-    datePosted: "May 10, 2025",
-  },
-  {
-    id: 2,
-    title: "Backend Developer - TechNova",
-    ctc: "8 LPA",
-    overview: "Build scalable backend APIs for enterprise applications.",
-    description:
-      "Hands-on experience with Node.js, Express, MongoDB, and RESTful services. Should have built production-grade apps.",
-    criteria: "Above 65% aggregate. No history of arrears.",
-    eligibleCourses: "B.E / B.Tech (All branches), M.Sc CS, MCA",
-    location: "Remote",
-    datePosted: "May 12, 2025",
-  },
-  {
-    id: 3,
-    title: "Data Analyst - FinScope",
-    ctc: "5 LPA",
-    overview: "Analyze market trends and help shape financial strategies.",
-    description:
-      "Required strong skills in Python, SQL, Excel, and PowerBI. Should be comfortable working with large datasets.",
-    criteria: "Min. 70% throughout academics.",
-    eligibleCourses: "B.Sc Statistics, B.Com, BBA, MBA",
-    location: "Mumbai, India",
-    datePosted: "May 8, 2025",
-  },
-];
+const VendorJobInbox = () => {
+  const [jobs, setJobs] = useState([]);
 
-function JobDashboard() {
-  const [selectedJob, setSelectedJob] = useState(jobData[0]);
+  useEffect(() => {
+    const storedJobs = localStorage.getItem("companyJobs");
+    if (storedJobs) {
+      setJobs(JSON.parse(storedJobs));
+    }
+  }, []);
 
   return (
-    <div className="flex h-screen font-sans">
-      {/* Left Panel */}
-      <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4">Job List</h2>
-        {jobData.map((job) => (
-          <button
-            key={job.id}
-            onClick={() => setSelectedJob(job)}
-            className={`w-full text-left p-3 rounded-lg transition ${
-              selectedJob.id === job.id
-                ? "bg-[#dfd0b8] text-[#222831]"
-                : "bg-gray-800 hover:bg-gray-700"
-            }`}
-          >
-            {job.title}
-          </button>
-        ))}
-      </div>
-
-      {/* Right Panel */}
-      <div className="w-3/4 bg-[#dfd0b8] overflow-y-auto p-10 px-15">
-        <h2 className="text-2xl font-bold text-[#222831] mb-2">
-          {selectedJob.title}
-        </h2>
-        <div className="text-sm text-[#222831] mb-4">
-          📅 Posted on: {selectedJob.datePosted}
-        </div>
-
-        <div className="mb-3">
-          <strong>💰 CTC:</strong> {selectedJob.ctc}
-        </div>
-
-        <div className="mb-3">
-          <strong>📍 Location:</strong> {selectedJob.location}
-        </div>
-
-        <div className="mb-3">
-          <strong>📝 Overview:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.overview}</p>
-        </div>
-
-        <div className="mb-3">
-          <strong>📄 Description:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.description}</p>
-        </div>
-
-        <div className="mb-3">
-          <strong>✅ Criteria:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.criteria}</p>
-        </div>
-
-        <div className="mb-6">
-          <strong>🎓 Eligible Courses:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.eligibleCourses}</p>
-        </div>
-
-        <div className="flex gap-8">
-          <button className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition">
-            Candidate-List
-          </button>
-          <button className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition">
-            Send to sub vendor
-          </button>
-        </div>
-      </div>
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Jobs Inbox</h2>
+      {jobs.length === 0 ? (
+        <p>No jobs found.</p>
+      ) : (
+        <ul className="space-y-4">
+          {jobs.map((job, index) => (
+            <li key={index} className="border p-4 rounded shadow">
+              <h3 className="text-lg font-semibold">{job.title}</h3>
+              <p className="text-sm text-gray-600">{job.company} - {job.location}</p>
+              <p className="mt-2">{job.description}</p>
+              <p className="text-sm mt-1">Type: {job.type}</p>
+              <p className="text-sm mt-1">Industry: {job.industry}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
-}
-export default JobDashboard;
+};
+
+export default VendorJobInbox;

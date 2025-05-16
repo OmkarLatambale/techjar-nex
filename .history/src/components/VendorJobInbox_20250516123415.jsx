@@ -152,7 +152,7 @@ function JobDashboard() {
   return (
     <div className="flex h-screen font-sans">
       {/* Left Panel */}
-      <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
+      <div className="w-1/4 bg-gray-900 text-white p-5 space-y-3 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Job List</h2>
         {jobData.map((job) => (
           <button
@@ -160,7 +160,7 @@ function JobDashboard() {
             onClick={() => setSelectedJob(job)}
             className={`w-full text-left p-3 rounded-lg transition ${
               selectedJob.id === job.id
-                ? "bg-[#dfd0b8] text-[#222831]"
+                ? "bg-blue-600"
                 : "bg-gray-800 hover:bg-gray-700"
             }`}
           >
@@ -170,11 +170,11 @@ function JobDashboard() {
       </div>
 
       {/* Right Panel */}
-      <div className="w-3/4 bg-[#dfd0b8] overflow-y-auto p-10 px-15">
+      <div className="w-3/4 bg-[#948979] overflow-y-auto">
         <h2 className="text-2xl font-bold text-[#222831] mb-2">
           {selectedJob.title}
         </h2>
-        <div className="text-sm text-[#222831] mb-4">
+        <div className="text-sm text-gray-500 mb-4">
           📅 Posted on: {selectedJob.datePosted}
         </div>
 
@@ -188,29 +188,29 @@ function JobDashboard() {
 
         <div className="mb-3">
           <strong>📝 Overview:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.overview}</p>
+          <p className="ml-2 text-gray-700">{selectedJob.overview}</p>
         </div>
 
         <div className="mb-3">
           <strong>📄 Description:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.description}</p>
+          <p className="ml-2 text-gray-700">{selectedJob.description}</p>
         </div>
 
         <div className="mb-3">
           <strong>✅ Criteria:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.criteria}</p>
+          <p className="ml-2 text-gray-700">{selectedJob.criteria}</p>
         </div>
 
         <div className="mb-6">
           <strong>🎓 Eligible Courses:</strong>
-          <p className="ml-2 text-[#222831]">{selectedJob.eligibleCourses}</p>
+          <p className="ml-2 text-gray-700">{selectedJob.eligibleCourses}</p>
         </div>
 
         <div className="flex gap-8">
-          <button className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition">
+          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
             Candidate-List
           </button>
-          <button className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition">
+          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
             Send to sub vendor
           </button>
         </div>

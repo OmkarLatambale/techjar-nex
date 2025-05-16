@@ -170,7 +170,7 @@ function JobDashboard() {
       </div>
 
       {/* Right Panel */}
-      <div className="w-3/4 bg-[#dfd0b8] overflow-y-auto p-10 px-15">
+      <div className="w-3/4 bg-[#948979] overflow-y-auto p-10 px-15">
         <h2 className="text-2xl font-bold text-[#222831] mb-2">
           {selectedJob.title}
         </h2>

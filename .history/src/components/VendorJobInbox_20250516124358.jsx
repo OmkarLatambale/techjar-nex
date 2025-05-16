@@ -152,7 +152,7 @@ function JobDashboard() {
   return (
     <div className="flex h-screen font-sans">
       {/* Left Panel */}
-      <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
+      <div className="w-1/4 bg-gray-900 text-white p-5 space-y-3 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Job List</h2>
         {jobData.map((job) => (
           <button
@@ -160,7 +160,7 @@ function JobDashboard() {
             onClick={() => setSelectedJob(job)}
             className={`w-full text-left p-3 rounded-lg transition ${
               selectedJob.id === job.id
-                ? "bg-[#dfd0b8] text-[#222831]"
+                ? "bg-blue-600"
                 : "bg-gray-800 hover:bg-gray-700"
             }`}
           >

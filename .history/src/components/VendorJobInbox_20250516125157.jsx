@@ -160,7 +160,7 @@ function JobDashboard() {
             onClick={() => setSelectedJob(job)}
             className={`w-full text-left p-3 rounded-lg transition ${
               selectedJob.id === job.id
-                ? "bg-[#dfd0b8] text-[#222831]"
+                ? "bg-blue-600"
                 : "bg-gray-800 hover:bg-gray-700"
             }`}
           >

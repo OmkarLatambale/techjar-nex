@@ -139,14 +139,15 @@ const VendorDashboard = () => {
           />
           <span className="text-3xl font-bold text-[#DFD0B8]">NEX.AI</span>
         </div>
-
-        <button
-          className="border px-4 py-1 rounded-md w-40 cursor-pointer"
-          onClick={() => navigate("/vendor-jobs")}
-        >
-          Jobs
-        </button>
-
+        <div className="flex gap-10">
+          <button
+            className="border px-4 py-1 rounded-md"
+            onClick={() => navigate("/vendor-jobs")}
+          >
+            Jobs
+          </button>
+          <button className="border px-4 py-1 rounded-md">Student-List</button>
+        </div>
         <div className="flex items-center gap-2 text-lg font-semibold">
           Hi, Vendor
           <UserRound className="w-6 h-6" />
@@ -170,9 +171,7 @@ const VendorDashboard = () => {
             <div className="text-sm mb-2">
               Number of candidates in the pipeline
             </div>
-            <div className="text-3xl font-bold">
-              {kpis.candidatesInPipeline}
-            </div>
+            <div className="text-3xl font-bold">{kpis.candidatesInPipeline}</div>
           </div>
           <div className="border border-[#DFD0B8] p-6 text-center rounded-md">
             <div className="text-sm mb-2">Applications processed</div>
@@ -195,3 +194,4 @@ const VendorDashboard = () => {
 };
 
 export default VendorDashboard;
+
