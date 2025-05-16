@@ -141,7 +141,7 @@ const VendorDashboard = () => {
         </div>
 
         <button
-          className="border px-4 py-1 rounded-md w-40 cursor-pointer"
+          className="border px-4 py-1 rounded-md"
           onClick={() => navigate("/vendor-jobs")}
         >
           Jobs
