@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import SuccessAnimation from "./SuccessAnimation"; // ✅ import animation
 
 const Jobpost = () => {
   const [orgName, setOrgName] = useState("");
@@ -9,9 +11,52 @@ const Jobpost = () => {
   const [overview, setOverview] = useState("");
   const [courses, setCourses] = useState("");
   const [criteria, setCriteria] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false); // ✅ animation toggle
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newJob = {
+      id: Date.now(),
+      company: orgName,
+      industry,
+      type: jobType,
+      title: jobTitle,
+      location,
+      description: overview,
+      requirements: [criteria],
+      responsibilities: [courses],
+    };
+
+    const existingJobs = JSON.parse(localStorage.getItem("companyJobs")) || [];
+    const updatedJobs = [...existingJobs, newJob];
+    localStorage.setItem("companyJobs", JSON.stringify(updatedJobs));
+
+    setShowSuccess(true); // ✅ trigger animation
+
+    // Clear fields
+    setOrgName("");
+    setIndustry("");
+    setJobType("");
+    setJobTitle("");
+    setLocation("");
+    setOverview("");
+    setCourses("");
+    setCriteria("");
+  };
+
+  // ✅ Auto-hide animation
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => setShowSuccess(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess]);
 
   return (
-    <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8]">
+    <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] relative">
+      {showSuccess && <SuccessAnimation />} {/* ✅ show animation */}
+
       {/* Navbar */}
       <nav className="flex justify-between items-center px-12 py-6 border-b border-[#393E46]">
         <div className="flex items-center gap-2">
@@ -24,13 +69,19 @@ const Jobpost = () => {
         </div>
         <ul className="flex items-center gap-10 text-[#DFD0B8] text-sm font-medium">
           <li>
-            <a href="#">Home</a>
+            <Link to="/" className="hover:text-[#948979] transition">
+              Home
+            </Link>
           </li>
           <li>
-            <a href="#">About us</a>
+            <Link to="/about" className="hover:text-[#948979] transition">
+              About us
+            </Link>
           </li>
           <li>
-            <a href="#">Contact us</a>
+            <Link to="/contact" className="hover:text-[#948979] transition">
+              Contact us
+            </Link>
           </li>
         </ul>
       </nav>
@@ -48,62 +99,52 @@ const Jobpost = () => {
             <h3 className="text-xl font-semibold">
               {jobTitle || "Job Title Preview"}
             </h3>
-            <p>
-              <strong>Company:</strong> {orgName || "Organization Name"}
-            </p>
-            <p>
-              <strong>Type:</strong> {jobType || "Job Type"}
-            </p>
-            <p>
-              <strong>Industry:</strong> {industry || "Industry"}
-            </p>
-            <p>
-              <strong>Location:</strong> {location || "Job Location"}
-            </p>
-            <p>
-              <strong>Courses:</strong> {courses || "Eligible Courses"}
-            </p>
-            <p>
-              <strong>Criteria:</strong> {criteria || "Eligibility Criteria"}
-            </p>
-            <p>
-              <strong>Overview:</strong>{" "}
-              {overview || "Company overview goes here..."}
-            </p>
+            <p><strong>Company:</strong> {orgName || "Organization Name"}</p>
+            <p><strong>Type:</strong> {jobType || "Job Type"}</p>
+            <p><strong>Industry:</strong> {industry || "Industry"}</p>
+            <p><strong>Location:</strong> {location || "Job Location"}</p>
+            <p><strong>Courses:</strong> {courses || "Eligible Courses"}</p>
+            <p><strong>Criteria:</strong> {criteria || "Eligibility Criteria"}</p>
+            <p><strong>Overview:</strong> {overview || "Company overview goes here..."}</p>
           </div>
         </div>
 
         {/* Form Section */}
-        <form className="w-full lg:w-1/2 space-y-5">
+        <form onSubmit={handleSubmit} className="w-full lg:w-1/2 space-y-5">
           <input
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Organization Name"
+            required
           />
           <input
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Select Job Industry"
+            required
           />
           <input
             value={jobType}
             onChange={(e) => setJobType(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Select Job Type"
+            required
           />
           <input
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Job Title"
+            required
           />
           <input
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Job Location"
+            required
           />
           <textarea
             value={overview}
@@ -111,18 +152,21 @@ const Jobpost = () => {
             rows={3}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Company Overview"
+            required
           />
           <input
             value={courses}
             onChange={(e) => setCourses(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Eligible Courses"
+            required
           />
           <input
             value={criteria}
             onChange={(e) => setCriteria(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Eligibility Criteria"
+            required
           />
           <button
             type="submit"
