@@ -151,9 +151,8 @@ function JobDashboard() {
   const navigate = useNavigate();
   return (
     <>
-      <div className="flex h-screen font-sans">
-        {/* Left Panel */}
-        <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
+      <div className="bg-transparent">
+        <nav className="flex justify-between items-center px-12 py-6 border-b border-[#393E46]">
           <div className="flex items-center gap-2">
             <img
               src="/src/assets/botImage.png"
@@ -162,6 +161,11 @@ function JobDashboard() {
             />
             <span className="text-2xl font-bold text-[#DFD0B8]">NEX.AI</span>
           </div>
+        </nav>
+      </div>
+      <div className="flex h-screen font-sans">
+        {/* Left Panel */}
+        <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Job List</h2>
           {jobData.map((job) => (
             <button
@@ -179,8 +183,8 @@ function JobDashboard() {
         </div>
 
         {/* Right Panel */}
-        <div className="bg-[#393e46] flex-1 p-5 px-15 justify-center items-center">
-          <div className="w-full bg-[#dfd0b8] mt-10 overflow-y-auto p-10 px-15 align-center rounded-lg shadow-lg">
+        <div className="bg-[#222831]">
+          <div className="w-3/4 bg-[#dfd0b8] overflow-y-auto p-10 px-15">
             <h2 className="text-2xl font-bold text-[#222831] mb-2">
               {selectedJob.title}
             </h2>
@@ -227,49 +231,7 @@ function JobDashboard() {
               >
                 Candidate-List
               </button>
-              <button
-                onClick={() => {
-                  const {
-                    title,
-                    ctc,
-                    overview,
-                    description,
-                    criteria,
-                    eligibleCourses,
-                    location,
-                    datePosted,
-                  } = selectedJob;
-
-                  const jobForSubVendor = {
-                    id: selectedJob.id,
-                    title,
-                    ctc,
-                    overview,
-                    description,
-                    criteria,
-                    eligibleCourses,
-                    location,
-                    datePosted,
-                  };
-
-                  // Simulate sending to sub vendor (store in localStorage for now)
-                  const existingJobs =
-                    JSON.parse(localStorage.getItem("subVendorJobs")) || [];
-
-                  // Avoid duplicates
-                  const updatedJobs = [
-                    ...existingJobs.filter((j) => j.id !== jobForSubVendor.id),
-                    jobForSubVendor,
-                  ];
-
-                  localStorage.setItem(
-                    "subVendorJobs",
-                    JSON.stringify(updatedJobs)
-                  );
-                  alert("Job sent to sub vendor successfully!");
-                }}
-                className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition"
-              >
+              <button className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition">
                 Send to sub vendor
               </button>
             </div>

@@ -139,9 +139,7 @@ const VendorDashboard = () => {
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-8 overflow-x-hidden">
       {/* Header */}
-      {/* Header */}
       <div className="flex justify-between items-center mb-10 animate-fade-in">
-        {/* Left: Logo */}
         <div className="flex items-center gap-3">
           <motion.img
             initial={{ scale: 0 }}
@@ -161,49 +159,46 @@ const VendorDashboard = () => {
           </motion.span>
         </div>
 
-        {/* Right: Jobs + Vendor */}
-        <div className="flex items-center gap-6">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="border px-4 py-1 rounded-md w-40 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition"
-            onClick={() => navigate("/vendor-jobs")}
-          >
-            Jobs
-          </motion.button>
+        <motion.button
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="border px-4 py-1 rounded-md w-40 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition"
+  onClick={() => navigate("/vendor-jobs")}
+>
+  Jobs
+</motion.button>
 
-          {/* Hoverable Dropdown for Vendor */}
-          <div className="relative group">
-            <motion.div
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              className="flex items-center gap-2 text-lg font-semibold cursor-pointer"
-            >
-              Hi, Vendor
-              <UserRound className="w-6 h-6" />
-            </motion.div>
+{/* Hoverable Dropdown for Vendor */}
+<div className="relative group">
+  <motion.div
+    initial={{ x: 50, opacity: 0 }}
+    animate={{ x: 0, opacity: 1 }}
+    className="flex items-center gap-2 text-lg font-semibold cursor-pointer"
+  >
+    Hi, Vendor
+    <UserRound className="w-6 h-6" />
+  </motion.div>
 
-            {/* Dropdown */}
-            <div className="absolute right-0 mt-2 w-40 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible">
-              <div
-                onClick={() => navigate("/vendor-jobs")}
-                className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer"
-              >
-                Jobs
-              </div>
-              <div
-                onClick={() => {
-                  // Replace with your actual logout logic
-                  navigate("/login");
-                }}
-                className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer"
-              >
-                Logout
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  {/* Dropdown */}
+  <div className="absolute right-0 mt-2 w-40 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible">
+    <div
+      onClick={() => navigate("/vendor-jobs")}
+      className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer"
+    >
+      Jobs
+    </div>
+    <div
+      onClick={() => {
+        // Replace with your actual logout logic
+        navigate("/login");
+      }}
+      className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer"
+    >
+      Logout
+    </div>
+  </div>
+</div>
+
 
       {/* KPI Cards */}
       <div className="flex justify-between items-start mt-10 flex-wrap gap-10">

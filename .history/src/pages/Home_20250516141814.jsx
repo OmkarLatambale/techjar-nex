@@ -18,6 +18,16 @@ const Home = () => {
             <br />
             Streamlined.
           </h1>
+
+          <div className="flex flex-col items-start gap-4 ml-20 mt-6">
+            {/* Vendor Dashboard Button (below Get Started) */}
+            <button
+              className="px-4 py-1 border border-[#DFD0B8] text-[#DFD0B8] rounded-md text-sm hover:bg-[#DFD0B8] hover:text-[#1a1d23] transition"
+              onClick={() => navigate("/vendor-dashboard")}
+            >
+              Vendor Dashboard
+            </button>
+          </div>
         </div>
 
         {/* Illustration */}

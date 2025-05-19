@@ -33,7 +33,7 @@ const handleSendMailToAll = () => {
 function StudentList() {
   return (
     <div className="p-6 bg-[#222831]">
-      <div className="flex items-center gap-2 mb-10">
+      <div className="flex items-center gap-2">
         <img src="/src/assets/botImage.png" alt="logo" className="w-10 h-10" />
         <span className="text-2xl font-bold text-[#DFD0B8]">NEX.AI</span>
       </div>

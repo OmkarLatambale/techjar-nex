@@ -227,49 +227,7 @@ function JobDashboard() {
               >
                 Candidate-List
               </button>
-              <button
-                onClick={() => {
-                  const {
-                    title,
-                    ctc,
-                    overview,
-                    description,
-                    criteria,
-                    eligibleCourses,
-                    location,
-                    datePosted,
-                  } = selectedJob;
-
-                  const jobForSubVendor = {
-                    id: selectedJob.id,
-                    title,
-                    ctc,
-                    overview,
-                    description,
-                    criteria,
-                    eligibleCourses,
-                    location,
-                    datePosted,
-                  };
-
-                  // Simulate sending to sub vendor (store in localStorage for now)
-                  const existingJobs =
-                    JSON.parse(localStorage.getItem("subVendorJobs")) || [];
-
-                  // Avoid duplicates
-                  const updatedJobs = [
-                    ...existingJobs.filter((j) => j.id !== jobForSubVendor.id),
-                    jobForSubVendor,
-                  ];
-
-                  localStorage.setItem(
-                    "subVendorJobs",
-                    JSON.stringify(updatedJobs)
-                  );
-                  alert("Job sent to sub vendor successfully!");
-                }}
-                className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition"
-              >
+              <button className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#393e46] hover:text-[#dfd0b8] transition">
                 Send to sub vendor
               </button>
             </div>
