@@ -8,7 +8,6 @@ import Contact from "./pages/Contact";
 import VendorDashboard from "./components/VendorDashboard";
 import VendorJobInbox from "./components/VendorJobInbox";
 import StudentList from "./components/StudentList";
-import SubVendorDashboard from "./components/SubVendorDashboard";
 function App() {
   return (
     <BrowserRouter>

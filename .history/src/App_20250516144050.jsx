@@ -7,8 +7,6 @@ import Jobpost from "./components/Jobpost";
 import Contact from "./pages/Contact";
 import VendorDashboard from "./components/VendorDashboard";
 import VendorJobInbox from "./components/VendorJobInbox";
-import StudentList from "./components/StudentList";
-import SubVendorDashboard from "./components/SubVendorDashboard";
 function App() {
   return (
     <BrowserRouter>
@@ -18,8 +16,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/jobpost" element={<Jobpost />} />
-        <Route path="/students" element={<StudentList />} />
-        <Route path="/subvendor-dashboard" element={<SubVendorDashboard />} />
+        {/* Vendor Routes */}
         <Route path="/vendor-dashboard" element={<VendorDashboard />} />
         <Route path="/vendor-jobs" element={<VendorJobInbox />} />
       </Routes>

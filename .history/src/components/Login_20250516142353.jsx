@@ -9,19 +9,14 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    setError(""); // clear previous errors
     if (role === "vendor") {
       if (email === "vendor@nex.ai" && password === "vendor123") {
         navigate("/vendor-dashboard");
       } else {
         setError("Invalid vendor credentials.");
       }
-    } else if (role === "sub-vendor") {
-      if (email === "subvendor@nex.ai" && password === "subvendor123") {
-        navigate("/subvendor-dashboard");
-      } else {
-        setError("Invalid sub-vendor credentials.");
-      }
+    } else {
+      setError("Sub-vendor login not yet implemented.");
     }
   };
 
