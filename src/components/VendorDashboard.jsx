@@ -104,6 +104,7 @@ import React, { useEffect, useState } from "react";
 import { fetchKPIs } from "../services/kpiService";
 import { UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 const VendorDashboard = () => {
@@ -184,19 +185,14 @@ const VendorDashboard = () => {
             </motion.div>
 
             {/* Dropdown */}
-            <div className="absolute right-0 mt-2 w-40 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible">
-              <div
-                onClick={() => navigate("/vendor-jobs")}
-                className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer"
-              >
-                Jobs
-              </div>
+            <div className="absolute right-0 mt-2 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible">
+              {" "}
               <div
                 onClick={() => {
                   // Replace with your actual logout logic
                   navigate("/login");
                 }}
-                className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer"
+                className="text-center text-sm px-3 py-1 hover:bg-[#3c4049] cursor-pointer w-full"
               >
                 Logout
               </div>
