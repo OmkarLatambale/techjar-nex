@@ -122,16 +122,21 @@ const Jobpost = () => {
             ) : (
               <ReactMarkdown
                 components={{
+                  // eslint-disable-next-line no-unused-vars
                   h1: ({ node, ...props }) => (
                     <h1 className="text-xl font-bold" {...props} />
                   ),
+                  // eslint-disable-next-line no-unused-vars
                   h2: ({ node, ...props }) => (
                     <h2 className="text-lg font-semibold mt-4" {...props} />
                   ),
+                  // eslint-disable-next-line no-unused-vars
                   p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                  // eslint-disable-next-line no-unused-vars
                   li: ({ node, ...props }) => (
                     <li className="list-disc ml-6" {...props} />
                   ),
+                  // eslint-disable-next-line no-unused-vars
                   strong: ({ node, ...props }) => (
                     <strong className="font-bold" {...props} />
                   ),
