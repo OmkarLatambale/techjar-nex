@@ -19,7 +19,7 @@ function Header() {
           {/* Logo Section */}
           <div className="flex items-center gap-3">
             <img
-              src="/src/assets/botImage.png"
+              src="assets/botImage.png"
               alt="logo"
               className="w-12 h-12 object-contain"
             />

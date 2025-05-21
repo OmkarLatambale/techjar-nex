@@ -1,9 +1,9 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className="w-full min-h-screen bg-[#222831] text-[#DFD0B8] flex flex-col">
@@ -23,7 +23,7 @@ const Home = () => {
         {/* Illustration */}
         <div className="-mt-12">
           <img
-            src="/src/assets/2.png"
+            src="/assets/2.png"
             alt="Hiring Visual"
             className="w-[840px] h-[570px] mr-0"
           />

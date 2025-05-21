@@ -7,7 +7,7 @@ function Footer() {
         <div className="flex items-center pl-10 gap-4">
           {/* Logo */}
           <img
-            src="/src/assets/botImage.png"
+            src="/assets/botImage.png"
             alt="logo"
             className="w-16 h-24 object-contain"
           />

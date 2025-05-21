@@ -31,7 +31,7 @@ function About() {
           </div>
           <div className=" flex justify-center -mr-25">
             <img
-              src="/src/assets/3.png"
+              src="/assets/3.png"
               alt="About NEX.AI"
               className="w-120 h-auto"
             />
