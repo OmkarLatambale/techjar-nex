@@ -15,6 +15,7 @@
     "classnames": "^2.5.1",
     "framer-motion": "^12.12.1",
     "lucide-react": "^0.508.0",
+    "markdown": "^0.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
