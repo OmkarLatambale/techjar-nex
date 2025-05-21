@@ -1,57 +1,70 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import SuccessAnimation from "./SuccessAnimation"; // ✅ import animation
+import SuccessAnimation from "./SuccessAnimation";
+import { useJobDescription } from "../hooks/useJobDescription";
+import ReactMarkdown from "react-markdown"; // <- ✅ ADD THIS
 
 const Jobpost = () => {
   const [orgName, setOrgName] = useState("");
-  const [email, setEmail] = useState(""); // ✅ email state
+  const [email, setEmail] = useState("");
   const [industry, setIndustry] = useState("");
-  const [jobType, setJobType] = useState("");
   const [jobTitle, setJobTitle] = useState("");
-  const [skills, setSkills] = useState(""); // ✅ skills state
+  const [skills, setSkills] = useState("");
   const [location, setLocation] = useState("");
-  const [ctc, setCtc] = useState(""); // ✅ ctc state
-  const [overview, setOverview] = useState("");
-  const [courses, setCourses] = useState("");
-  const [criteria, setCriteria] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false); // ✅ animation toggle
+  const [ctc, setCtc] = useState("");
+  const [eligibility, setEligibility] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [hasGenerated, setHasGenerated] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const { generatedDesc, loading, error, generateJD } = useJobDescription();
 
+  const handleGenerate = async () => {
+    await generateJD({
+      orgName,
+      industry,
+      title: jobTitle,
+      skills,
+      location,
+      ctc,
+      eligibilityCriteria: eligibility,
+      requirements,
+    });
+    setHasGenerated(true);
+  };
+
+  const handlePostJob = () => {
     const newJob = {
       id: Date.now(),
       company: orgName,
       email,
       industry,
-      type: jobType,
       title: jobTitle,
-      skills: skills.split(",").map((s) => s.trim()), // ✅ store skills as array
+      skills: skills.split(",").map((s) => s.trim()),
       location,
       ctc,
-      description: overview,
-      requirements: [criteria],
-      responsibilities: [courses],
+      eligibility,
+      description: generatedDesc,
+      requirements: [requirements],
     };
 
     const existingJobs = JSON.parse(localStorage.getItem("companyJobs")) || [];
-    const updatedJobs = [...existingJobs, newJob];
-    localStorage.setItem("companyJobs", JSON.stringify(updatedJobs));
+    localStorage.setItem(
+      "companyJobs",
+      JSON.stringify([...existingJobs, newJob])
+    );
 
-    setShowSuccess(true); // ✅ trigger animation
-
-    // Clear fields
+    setShowSuccess(true);
     setOrgName("");
     setEmail("");
     setIndustry("");
-    setJobType("");
     setJobTitle("");
     setSkills("");
     setLocation("");
     setCtc("");
-    setOverview("");
-    setCourses("");
-    setCriteria("");
+    setEligibility("");
+    setRequirements("");
+    setHasGenerated(false);
   };
 
   useEffect(() => {
@@ -68,39 +81,82 @@ const Jobpost = () => {
       {/* Navbar */}
       <nav className="flex justify-between items-center px-12 py-6 border-b border-[#393E46]">
         <div className="flex items-center gap-2">
-          <img src="/src/assets/botImage.png" alt="logo" className="w-10 h-10" />
+          <img
+            src="/src/assets/botImage.png"
+            alt="logo"
+            className="w-10 h-10"
+          />
           <span className="text-2xl font-bold text-[#DFD0B8]">NEX.AI</span>
         </div>
         <ul className="flex items-center gap-10 text-sm font-medium">
-          <li><Link to="/" className="hover:text-[#948979]">Home</Link></li>
-          <li><Link to="/about" className="hover:text-[#948979]">About us</Link></li>
-          <li><Link to="/contact" className="hover:text-[#948979]">Contact us</Link></li>
+          <li>
+            <Link to="/" className="hover:text-[#948979]">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/about" className="hover:text-[#948979]">
+              About us
+            </Link>
+          </li>
+          <li>
+            <Link to="/contact" className="hover:text-[#948979]">
+              Contact us
+            </Link>
+          </li>
         </ul>
       </nav>
 
-      {/* Content */}
-      <div className="px-10 py-12 flex flex-col lg:flex-row gap-12">
-        {/* Preview Section */}
-        <div className="w-full lg:w-1/2 border-r border-[#393E46] pr-6">
-          <h2 className="text-2xl font-bold mb-4">Ready to Hire?</h2>
-          <p className="mb-6 text-sm">Provide the details below to publish your opening and connect with the right candidates through our System.</p>
-          <div className="bg-[#2b2f38] rounded-lg p-6 space-y-4">
-            <h3 className="text-xl font-semibold">{jobTitle || "Job Title Preview"}</h3>
-            <p><strong>Company:</strong> {orgName || "Organization Name"}</p>
-            <p><strong>Email:</strong> {email || "example@email.com"}</p>
-            <p><strong>Type:</strong> {jobType || "Job Type"}</p>
-            <p><strong>Industry:</strong> {industry || "Industry"}</p>
-            <p><strong>Location:</strong> {location || "Job Location"}</p>
-            <p><strong>CTC:</strong> {ctc || "Expected CTC"}</p>
-            <p><strong>Skills:</strong> {skills || "Required Skills (comma-separated)"}</p>
-            <p><strong>Courses:</strong> {courses || "Eligible Courses"}</p>
-            <p><strong>Criteria:</strong> {criteria || "Eligibility Criteria"}</p>
-            <p><strong>Overview:</strong> {overview || "Company overview goes here..."}</p>
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row gap-10 px-10 py-12">
+        {/* Left: Preview + Post */}
+        <div className="w-full lg:w-1/2 flex flex-col">
+          <div className="bg-[#2b2f38] rounded-lg p-6 text-sm min-h-[300px]">
+            <strong className="block mb-2 text-[#948979]">
+              Generated Job Description:
+            </strong>
+            {loading ? (
+              <p className="text-yellow-400">Generating job description...</p>
+            ) : error ? (
+              <p className="text-red-400">Error: {error}</p>
+            ) : (
+              <ReactMarkdown
+                components={{
+                  h1: ({ node, ...props }) => (
+                    <h1 className="text-xl font-bold" {...props} />
+                  ),
+                  h2: ({ node, ...props }) => (
+                    <h2 className="text-lg font-semibold mt-4" {...props} />
+                  ),
+                  p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                  li: ({ node, ...props }) => (
+                    <li className="list-disc ml-6" {...props} />
+                  ),
+                  strong: ({ node, ...props }) => (
+                    <strong className="font-bold" {...props} />
+                  ),
+                }}
+              >
+                {generatedDesc || "Generated job description will appear here."}
+              </ReactMarkdown>
+            )}
           </div>
+
+          {hasGenerated && (
+            <button
+              onClick={handlePostJob}
+              className="mt-4 w-full bg-transparent border border-[#948979] hover:bg-[#393E46] py-2 rounded-full"
+            >
+              Post A Job
+            </button>
+          )}
         </div>
 
-        {/* Form Section */}
-        <form onSubmit={handleSubmit} className="w-full lg:w-1/2 space-y-5">
+        {/* Right: Form */}
+        <form
+          className="w-full lg:w-1/2 space-y-5"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <input
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
@@ -111,23 +167,16 @@ const Jobpost = () => {
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            type="email"
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Email Address"
-            type="email"
             required
           />
           <input
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Select Job Industry"
-            required
-          />
-          <input
-            value={jobType}
-            onChange={(e) => setJobType(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Select Job Type"
+            placeholder="Industry"
             required
           />
           <input
@@ -137,12 +186,11 @@ const Jobpost = () => {
             placeholder="Job Title"
             required
           />
-          {/* ✅ Skills Field Below Job Title */}
           <input
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Skills (e.g. JavaScript, Python, SQL)"
+            placeholder="Skills (comma-separated)"
             required
           />
           <input
@@ -160,32 +208,29 @@ const Jobpost = () => {
             required
           />
           <textarea
-            value={overview}
-            onChange={(e) => setOverview(e.target.value)}
+            value={eligibility}
+            onChange={(e) => setEligibility(e.target.value)}
             rows={3}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Company Overview"
-            required
-          />
-          <input
-            value={courses}
-            onChange={(e) => setCourses(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Eligible Courses"
-            required
-          />
-          <input
-            value={criteria}
-            onChange={(e) => setCriteria(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Eligibility Criteria"
             required
           />
+          <textarea
+            value={requirements}
+            onChange={(e) => setRequirements(e.target.value)}
+            rows={3}
+            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
+            placeholder="Requirements"
+            required
+          />
+
           <button
-            type="submit"
-            className="mt-4 w-full bg-transparent border border-[#948979] hover:bg-[#393E46] py-2 rounded-full"
+            type="button"
+            onClick={handleGenerate}
+            disabled={loading}
+            className="w-full bg-transparent border border-[#948979] hover:bg-[#393E46] py-2 rounded-full"
           >
-            Post Job
+            {loading ? "Generating..." : "Generate Job"}
           </button>
         </form>
       </div>
