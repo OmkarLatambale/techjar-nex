@@ -1,9 +1,9 @@
 // src/hooks/useAuth.js
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "..//services/authService";
+import { loginUser } from "../services/auth";
 
-export function useLogin() {
+export function useAuth() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
