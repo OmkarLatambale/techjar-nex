@@ -1,13 +1,13 @@
 // src/pages/Login.js
 import React, { useState } from "react";
-import { useLogin } from "../hooks/useLogin";
+import { useAuth } from "../hooks/useAuth"; // Adjust the import path as necessary
 
 function Login() {
   const [role, setRole] = useState("vendor");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login, error, loading } = useLogin();
+  const { login, error, loading } = useAuth();
 
   const handleLogin = () => {
     login({ email, password, role });

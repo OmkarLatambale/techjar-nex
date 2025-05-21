@@ -1,6 +1,6 @@
 // src/pages/Login.js
 import React, { useState } from "react";
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from "../hooks/useAuth";
 
 function Login() {
   const [role, setRole] = useState("vendor");
