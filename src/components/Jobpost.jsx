@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SuccessAnimation from "./SuccessAnimation";
 import { useJobDescription } from "../hooks/useJobDescription";
+
+
 import ReactMarkdown from "react-markdown"; // <- ✅ ADD THIS
 
 const Jobpost = () => {
@@ -82,7 +84,7 @@ const Jobpost = () => {
       <nav className="flex justify-between items-center px-12 py-6 border-b border-[#393E46]">
         <div className="flex items-center gap-2">
           <img
-            src="/src/assets/botImage.png"
+            src="/assets/botImage.png"
             alt="logo"
             className="w-10 h-10"
           />
