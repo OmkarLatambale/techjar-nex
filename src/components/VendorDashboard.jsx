@@ -148,7 +148,7 @@ const VendorDashboard = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
-            src="/src/assets/botImage.png"
+            src="/assets/botImage.png"
             alt="logo"
             className="w-12 h-12 object-contain"
           />
@@ -246,7 +246,7 @@ const VendorDashboard = () => {
           className="mr-5"
         >
           <img
-            src="/src/assets/1.png"
+            src="/assets/1.png"
             alt="Illustration"
             className="max-w-md object-contain rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
           />
