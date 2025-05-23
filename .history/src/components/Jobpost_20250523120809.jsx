@@ -24,7 +24,7 @@ const Jobpost = () => {
     await generateJD({
       organization_name,
       job_industry,
-      job_title: job_title,
+      job_title: jobTitle,
       skills,
       job_location,
       ctc,
@@ -37,9 +37,9 @@ const Jobpost = () => {
   const handlePostJob = () => {
     const newJob = {
       id: Date.now(),
-      company: organization_name,
+      company: orgName,
       email,
-      job_title: job_title,
+      job_title: jobTitle,
       skills: skills.split(",").map((s) => s.trim()),
       location,
       ctc,
@@ -160,7 +160,7 @@ const Jobpost = () => {
         >
           <input
             value={organization_name}
-            onChange={(e) => setorganization_name(e.target.value)}
+            onChange={(e) => setOrgName(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Organization Name"
             required
@@ -175,28 +175,28 @@ const Jobpost = () => {
           />
           <input
             value={job_industry}
-            onChange={(e) => setjob_industry(e.target.value)}
+            onChange={(e) => setIndustry(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Industry"
             required
           />
           <input
             value={job_title}
-            onChange={(e) => setjob_title(e.target.value)}
+            onChange={(e) => setJobTitle(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Job Title"
             required
           />
           <input
             value={skills}
-            onChange={(e) => setskills(e.target.value)}
+            onChange={(e) => setSkills(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Skills (comma-separated)"
             required
           />
           <input
             value={job_location}
-            onChange={(e) => setjob_location(e.target.value)}
+            onChange={(e) => setLocation(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Job Location"
             required
@@ -210,7 +210,7 @@ const Jobpost = () => {
           />
           <textarea
             value={eligibility_criteria}
-            onChange={(e) => seteligibility_criteria(e.target.value)}
+            onChange={(e) => setEligibility(e.target.value)}
             rows={3}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Eligibility Criteria"
