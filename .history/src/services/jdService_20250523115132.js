@@ -1,12 +1,12 @@
 // src/services/jdService.js
 export const generateJobDescriptionAPI = async ({
-  organization_name,
-  job_industry,
-  job_title,
+  orgName,
+  industry,
+  title,
   skills,
-  job_location,
+  location,
   ctc,
-  eligibility_criteria,
+  eligibilityCriteria,
   requirements,
 }) => {
   const response = await fetch("http://localhost:5000/generate_jd", {
@@ -15,13 +15,13 @@ export const generateJobDescriptionAPI = async ({
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      organization_name,
-      job_industry,
-      job_title,
+      orgName,
+      industry,
+      title,
       skills,
-      job_location,
+      location,
       ctc,
-      eligibility_criteria,
+      eligibilityCriteria,
       requirements,
     }),
   });
