@@ -1,4 +1,5 @@
-// src/services/auth.js
+/* eslint-disable no-useless-catch */
+// src/services/authService.js
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
 
 export async function loginUser({ email, password, role }) {
@@ -19,6 +20,7 @@ export async function loginUser({ email, password, role }) {
 
     return data;
   } catch (error) {
+    // Just rethrow the error to handle it upstream
     throw error;
   }
 }

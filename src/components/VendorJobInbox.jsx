@@ -236,6 +236,7 @@ function JobDashboard() {
                 const updatedJobs = [
                   ...existingJobs.filter((j) => j.id !== jobForSubVendor.id),
                   jobForSubVendor,
+                  
                 ];
                 localStorage.setItem("subVendorJobs", JSON.stringify(updatedJobs));
                 navigate("/subvendor-list");

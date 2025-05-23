@@ -1,7 +1,7 @@
 // src/hooks/useAuth.js
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "..//services/authService";
+import { loginUser } from "../services/authService"; // fixed import path
 
 export function useLogin() {
   const [error, setError] = useState("");
@@ -13,9 +13,10 @@ export function useLogin() {
     setError("");
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const data = await loginUser({ email, password, role });
 
-      // Optional: Save token if provided
+      // Optional: Save token if backend returns it
       // localStorage.setItem("token", data.token);
 
       if (role === "vendor") {
