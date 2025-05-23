@@ -8,12 +8,12 @@ import ReactMarkdown from "react-markdown"; // <- ✅ ADD THIS
 const Jobpost = () => {
   const [organization_name, setorganization_name] = useState("");
   const [email, setEmail] = useState("");
-  const [job_industry, setjob_industry] = useState("");
-  const [job_title, setjob_title] = useState("");
-  const [skills, setskills] = useState("");
-  const [job_location, setjob_location] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [skills, setSkills] = useState("");
+  const [location, setLocation] = useState("");
   const [ctc, setCtc] = useState("");
-  const [eligibility_criteria, seteligibility_criteria] = useState("");
+  const [eligibility, setEligibility] = useState("");
   const [requirements, setRequirements] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
@@ -22,13 +22,13 @@ const Jobpost = () => {
 
   const handleGenerate = async () => {
     await generateJD({
-      organization_name,
-      job_industry,
-      job_title: jobTitle,
+      orgName,
+      industry,
+      title: jobTitle,
       skills,
-      job_location,
+      location,
       ctc,
-      eligibility_criteria: eligibility,
+      eligibilityCriteria: eligibility,
       requirements,
     });
     setHasGenerated(true);
@@ -39,12 +39,12 @@ const Jobpost = () => {
       id: Date.now(),
       company: orgName,
       email,
-      job_title,
+      industry,
       title: jobTitle,
       skills: skills.split(",").map((s) => s.trim()),
       location,
       ctc,
-      eligibility_criteria,
+      eligibility,
       description: generatedDesc,
       requirements: [requirements],
     };
@@ -56,14 +56,14 @@ const Jobpost = () => {
     );
 
     setShowSuccess(true);
-    setorganization_name("");
+    setOrgName("");
     setEmail("");
-    setjob_industry("");
-    setjob_title("");
-    setskills("");
-    setjob_location("");
+    setIndustry("");
+    setJobTitle("");
+    setSkills("");
+    setLocation("");
     setCtc("");
-    seteligibility_criteria("");
+    setEligibility("");
     setRequirements("");
     setHasGenerated(false);
   };
@@ -160,7 +160,7 @@ const Jobpost = () => {
           onSubmit={(e) => e.preventDefault()}
         >
           <input
-            value={organization_name}
+            value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Organization Name"
@@ -175,14 +175,14 @@ const Jobpost = () => {
             required
           />
           <input
-            value={job_industry}
+            value={industry}
             onChange={(e) => setIndustry(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Industry"
             required
           />
           <input
-            value={job_title}
+            value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Job Title"
@@ -196,7 +196,7 @@ const Jobpost = () => {
             required
           />
           <input
-            value={job_location}
+            value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Job Location"
@@ -210,7 +210,7 @@ const Jobpost = () => {
             required
           />
           <textarea
-            value={eligibility_criteria}
+            value={eligibility}
             onChange={(e) => setEligibility(e.target.value)}
             rows={3}
             className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"

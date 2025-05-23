@@ -8,27 +8,27 @@ export const useJobDescription = () => {
   const [error, setError] = useState("");
 
   const generateJD = async ({
-    organization_name,
-      job_industry,
-      job_title,
-      skills,
-      job_location,
-      ctc,
-      eligibility_criteria,
-      requirements,
+    orgName,
+    industry,
+    title,
+    skills,
+    location,
+    ctc,
+    eligibilityCriteria,
+    requirements,
   }) => {
     setLoading(true);
     setError("");
     try {
       const data = await generateJobDescriptionAPI({
-       organization_name,
-      job_industry,
-      job_title,
-      skills,
-      job_location,
-      ctc,
-      eligibility_criteria,
-      requirements,
+        orgName,
+        industry,
+        title,
+        skills,
+        location,
+        ctc,
+        eligibilityCriteria,
+        requirements,
       });
       setGeneratedDesc(data.job_description || "No description returned.");
     } catch (err) {
