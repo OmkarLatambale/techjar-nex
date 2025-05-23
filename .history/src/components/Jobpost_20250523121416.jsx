@@ -220,7 +220,7 @@ const Jobpost = () => {
             value={requirements}
             onChange={(e) => setRequirements(e.target.value)}
             rows={3}
-            className="w-full px-5 py-3 bg-[#2b2f38] rounded-md"
+            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
             placeholder="Requirements"
             required
           />
