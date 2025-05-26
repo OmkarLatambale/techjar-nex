@@ -1,28 +1,20 @@
-// services/jobService.js
-const BASE_URL = import.meta.env.VITE_API_URL;
+import axios from "axios";
 
-export const fetchJobs = async () => {
-  const res = await fetch(`${BASE_URL}/jobs`);
-  if (!res.ok) throw new Error("Failed to fetch jobs");
-  return await res.json();
+const API_URL = import.meta.env.VITE_API_URL; // Should be: https://ibot-backend.onrender.com
+
+export const postJob = async (jobData) => {
+  const response = await axios.post(`${API_URL}/jobs/post-job-jd/`, jobData);
+  return response.data;
 };
 
-export const confirmJob = async (jobId) => {
-  return await fetch(`${BASE_URL}/jobs/${jobId}/confirm`, {
-    method: "POST",
-  });
-};
-
-export const rejectJob = async (jobId) => {
-  return await fetch(`${BASE_URL}/jobs/${jobId}/reject`, {
-    method: "POST",
-  });
+export const getJobsForVendor = async () => {
+  const response = await axios.get(`${API_URL}/jobs/`);
+  return response.data;
 };
 
 export const assignToSubVendor = async (jobId, subVendorId) => {
-  return await fetch(`${BASE_URL}/jobs/${jobId}/assign`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ subVendorId }),
+  const response = await axios.post(`${API_URL}/jobs/${jobId}/assign`, {
+    subVendorId,
   });
+  return response.data;
 };
