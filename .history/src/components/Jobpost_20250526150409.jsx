@@ -1,8 +1,7 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SuccessAnimation from "./SuccessAnimation";
 import { useJobDescription } from "../hooks/useJobDescription";
-import { postJob } from "../services/jobService";
 
 import ReactMarkdown from "react-markdown"; // <- ✅ ADD THIS
 
@@ -20,13 +19,6 @@ const Jobpost = () => {
   const [hasGenerated, setHasGenerated] = useState(false);
 
   const { generatedDesc, loading, error, generateJD } = useJobDescription();
-  const [editableDesc, setEditableDesc] = useState("");
-
-  useEffect(() => {
-    if (generatedDesc) {
-      setEditableDesc(generatedDesc);
-    }
-  }, [generatedDesc]);
 
   const handleGenerate = async () => {
     await generateJD({
@@ -38,7 +30,6 @@ const Jobpost = () => {
       ctc,
       eligibility_criteria: eligibility_criteria,
       requirements,
-      email,
     });
     setHasGenerated(true);
   };
@@ -46,30 +37,24 @@ const Jobpost = () => {
   const handlePostJob = async () => {
     const newJob = {
       organization_name,
-      job_title,
       email,
-      posted_at: new Date().toISOString(),
-      generated_jd: generatedDesc,
+      job_industry,
+      job_title,
+      skills: skills.split(",").map((s) => s.trim()),
+      job_location: location,
+      ctc,
+      eligibility_criteria,
+      requirements: [requirements],
+      description: generatedDesc,
     };
 
     try {
-      await postJob(newJob);
-      setShowSuccess(true);
-
-      // Reset the form
-      setorganization_name("");
-      setEmail("");
-      setjob_industry("");
-      setjob_title("");
-      setskills("");
-      setjob_location("");
-      setCtc("");
-      seteligibility_criteria("");
-      setRequirements("");
-      setHasGenerated(false);
+      const response = await postJob(newJob);
+      console.log("Job posted successfully:", response);
+      // Optionally show success UI and clear form
     } catch (error) {
       console.error("Error posting job:", error);
-      alert("Failed to post job. Please try again.");
+      alert("Failed to post job");
     }
   };
 
@@ -117,26 +102,41 @@ const Jobpost = () => {
             <strong className="block mb-2 text-[#948979]">
               Generated Job Description:
             </strong>
-
             {loading ? (
               <p className="text-yellow-400">Generating job description...</p>
             ) : error ? (
               <p className="text-red-400">Error: {error}</p>
             ) : (
-              <textarea
-                className="w-full bg-[#1e1e24] text-white p-2 rounded-md min-h-[200px]"
-                value={editableDesc}
-                onChange={(e) => setEditableDesc(e.target.value)}
-              />
+              <ReactMarkdown
+                components={{
+                  // eslint-disable-next-line no-unused-vars
+                  h1: ({ node, ...props }) => (
+                    <h1 className="text-xl font-bold" {...props} />
+                  ),
+                  // eslint-disable-next-line no-unused-vars
+                  h2: ({ node, ...props }) => (
+                    <h2 className="text-lg font-semibold mt-4" {...props} />
+                  ),
+                  // eslint-disable-next-line no-unused-vars
+                  p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                  // eslint-disable-next-line no-unused-vars
+                  li: ({ node, ...props }) => (
+                    <li className="list-disc ml-6" {...props} />
+                  ),
+                  // eslint-disable-next-line no-unused-vars
+                  strong: ({ node, ...props }) => (
+                    <strong className="font-bold" {...props} />
+                  ),
+                }}
+              >
+                {generatedDesc || "Generated job description will appear here."}
+              </ReactMarkdown>
             )}
           </div>
 
           {hasGenerated && (
             <button
-              onClick={() => {
-                const cleanedDesc = editableDesc.replace(/\n/g, " ");
-                handlePostJob(cleanedDesc);
-              }}
+              onClick={handlePostJob}
               className="mt-4 w-full bg-transparent border border-[#948979] hover:bg-[#393E46] py-2 rounded-full"
             >
               Post A Job

@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SuccessAnimation from "./SuccessAnimation";
 import { useJobDescription } from "../hooks/useJobDescription";
@@ -21,12 +21,6 @@ const Jobpost = () => {
 
   const { generatedDesc, loading, error, generateJD } = useJobDescription();
   const [editableDesc, setEditableDesc] = useState("");
-
-  useEffect(() => {
-    if (generatedDesc) {
-      setEditableDesc(generatedDesc);
-    }
-  }, [generatedDesc]);
 
   const handleGenerate = async () => {
     await generateJD({
