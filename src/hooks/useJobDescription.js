@@ -16,6 +16,7 @@ export const useJobDescription = () => {
     ctc,
     eligibility_criteria,
     requirements,
+    email,
   }) => {
     setLoading(true);
     setError("");
@@ -30,6 +31,7 @@ export const useJobDescription = () => {
         ctc,
         eligibility_criteria,
         requirements,
+        email,
       });
 
       setGeneratedDesc(description || "No description returned.");
@@ -43,6 +45,7 @@ export const useJobDescription = () => {
 
   return { generatedDesc, loading, error, generateJD };
 };
+
 
 
 
