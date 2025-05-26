@@ -1,38 +1,32 @@
 // src/services/jdService.js
-export const generateJobDescriptionAPI = async ({
-  organization_name,
-  job_industry,
-  job_title,
-  skills,
-  job_location,
-  ctc,
-  eligibility_criteria,
-  requirements,
-}) => {
-  const response = await fetch("http://localhost:5000/generate_jd", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      organization_name,
-      job_industry,
-      job_title,
-      skills,
-      job_location,
-      ctc,
-      eligibility_criteria,
-      requirements,
-    }),
-  });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || "Failed to generate job description.");
+export const generateJobDescriptionAPI = async (jobData) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/jobs/post-job/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobData),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to generate job description.");
+    }
+
+    const data = await response.json();
+
+    // ✅ Only return the generated_job_description field
+    return data.generated_jd;
+  } catch (err) {
+    throw new Error(err.message || "Something went wrong while generating job description.");
   }
-
-  return response.json();
 };
+
 
 // export const generateJobDescriptionAPI = async ({
 //   orgName,

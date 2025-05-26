@@ -1,10 +1,10 @@
 /* eslint-disable no-useless-catch */
 // src/services/authService.js
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function loginUser({ email, password, role }) {
   try {
-    const response = await fetch(`${API_BASE_URL}/login/`, {
+    const response = await fetch(`${API_BASE_URL}/api/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
