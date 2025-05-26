@@ -30,6 +30,7 @@ const Jobpost = () => {
       ctc,
       eligibility_criteria: eligibility_criteria,
       requirements,
+      email,
     });
     setHasGenerated(true);
   };
