@@ -28,7 +28,7 @@ const Jobpost = () => {
       skills,
       job_location,
       ctc,
-      eligibility_criteria: eligibility,
+      eligibility_criteria: eligibility_criteria,
       requirements,
     });
     setHasGenerated(true);

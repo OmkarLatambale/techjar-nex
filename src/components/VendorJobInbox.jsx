@@ -105,54 +105,33 @@
 
 // export default VendorJobInbox;
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-const jobData = [
-  {
-    id: 1,
-    title: "Software Engineer - NexAI",
-    ctc: "6 LPA",
-    skills: ["JavaScript", "React", "Node.js"],
-    overview: "Exciting opportunity to work with AI-powered platforms.",
-    description:
-      "You will be working on cutting-edge technologies to automate interviews using AI. You’ll collaborate with cross-functional teams and vendors.",
-    criteria: "Minimum 60% in 10th, 12th, and Graduation. No active backlogs.",
-    eligibleCourses: "B.E / B.Tech (CSE, IT, ECE), MCA",
-    location: "Bangalore, India",
-    datePosted: "May 10, 2025",
-  },
-  {
-    id: 2,
-    title: "Backend Developer - TechNova",
-    ctc: "8 LPA",
-    skills: ["Node.js", "MongoDB", "Express"],
-    overview: "Build scalable backend APIs for enterprise applications.",
-    description:
-      "Hands-on experience with Node.js, Express, MongoDB, and RESTful services. Should have built production-grade apps.",
-    criteria: "Above 65% aggregate. No history of arrears.",
-    eligibleCourses: "B.E / B.Tech (All branches), M.Sc CS, MCA",
-    location: "Remote",
-    datePosted: "May 12, 2025",
-  },
-  {
-    id: 3,
-    title: "Data Analyst - FinScope",
-    ctc: "5 LPA",
-    skills: ["Python", "SQL", "PowerBI", "Excel"],
-    overview: "Analyze market trends and help shape financial strategies.",
-    description:
-      "Required strong skills in Python, SQL, Excel, and PowerBI. Should be comfortable working with large datasets.",
-    criteria: "Min. 70% throughout academics.",
-    eligibleCourses: "B.Sc Statistics, B.Com, BBA, MBA",
-    location: "Mumbai, India",
-    datePosted: "May 8, 2025",
-  },
-];
+import { useJobs } from "../hooks/useJobs";
+import { assignToSubVendor } from "../services/jobService";
 
 function JobDashboard() {
-  const [selectedJob, setSelectedJob] = useState(jobData[0]);
+  const { jobs, loading, error } = useJobs();
+  const [selectedJob, setSelectedJob] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (jobs.length > 0) {
+      setSelectedJob(jobs[0]); // default select first job when loaded
+    }
+  }, [jobs]);
+
+  const handleAssignToSubVendor = async () => {
+    try {
+      await assignToSubVendor(selectedJob.id, "sub-vendor-123"); // Use actual subVendorId from context or state
+      navigate("/subvendor-list");
+    } catch  {
+      alert("Failed to assign job to sub vendor");
+    }
+  };
+
+  if (loading) return <div className="text-white p-5">Loading jobs...</div>;
+  if (error) return <div className="text-red-500 p-5">Error: {error}</div>;
 
   return (
     <div className="flex h-screen font-sans">
@@ -163,12 +142,12 @@ function JobDashboard() {
           <span className="text-2xl font-bold text-[#DFD0B8]">NEX.AI</span>
         </div>
         <h2 className="text-xl font-bold mb-4">Job List</h2>
-        {jobData.map((job) => (
+        {jobs.map((job) => (
           <button
             key={job.id}
             onClick={() => setSelectedJob(job)}
             className={`w-full text-left p-3 rounded-lg transition ${
-              selectedJob.id === job.id
+              selectedJob?.id === job.id
                 ? "bg-[#dfd0b8] text-[#222831]"
                 : "bg-gray-800 hover:bg-gray-700"
             }`}
@@ -180,77 +159,68 @@ function JobDashboard() {
 
       {/* Right Panel */}
       <div className="bg-[#393e46] flex-1 p-5 overflow-y-auto max-h-screen">
-  <div className="w-full bg-[#dfd0b8] p-10 rounded-lg shadow-lg">
+        {selectedJob && (
+          <div className="w-full bg-[#dfd0b8] p-10 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold text-[#222831] mb-2">
+              {selectedJob.title}
+            </h2>
+            <div className="text-sm text-[#222831] mb-4">
+              📅 Posted on: {selectedJob.datePosted}
+            </div>
 
-          <h2 className="text-2xl font-bold text-[#222831] mb-2">
-            {selectedJob.title}
-          </h2>
-          <div className="text-sm text-[#222831] mb-4">
-            📅 Posted on: {selectedJob.datePosted}
-          </div>
+            <div className="mb-3">
+              <strong>💰 CTC:</strong> {selectedJob.ctc}
+            </div>
 
-          <div className="mb-3">
-            <strong>💰 CTC:</strong> {selectedJob.ctc}
-          </div>
+            <div className="mb-3">
+              <strong>📍 Location:</strong> {selectedJob.location}
+            </div>
 
-          <div className="mb-3">
-            <strong>📍 Location:</strong> {selectedJob.location}
-          </div>
+            <div className="mb-3">
+              <strong>🛠️ Skills:</strong> {selectedJob.skills.join(", ")}
+            </div>
 
-          <div className="mb-3">
-            <strong>🛠️ Skills:</strong> {selectedJob.skills.join(", ")}
-          </div>
+            <div className="mb-3">
+              <strong>📝 Overview:</strong>
+              <p className="ml-2 text-[#222831]">{selectedJob.overview}</p>
+            </div>
 
-          <div className="mb-3">
-            <strong>📝 Overview:</strong>
-            <p className="ml-2 text-[#222831]">{selectedJob.overview}</p>
-          </div>
+            <div className="mb-3">
+              <strong>📄 Description:</strong>
+              <p className="ml-2 text-[#222831]">{selectedJob.description}</p>
+            </div>
 
-          <div className="mb-3">
-            <strong>📄 Description:</strong>
-            <p className="ml-2 text-[#222831]">{selectedJob.description}</p>
-          </div>
+            <div className="mb-3">
+              <strong>✅ Criteria:</strong>
+              <p className="ml-2 text-[#222831]">{selectedJob.criteria}</p>
+            </div>
 
-          <div className="mb-3">
-            <strong>✅ Criteria:</strong>
-            <p className="ml-2 text-[#222831]">{selectedJob.criteria}</p>
-          </div>
+            <div className="mb-6">
+              <strong>🎓 Eligible Courses:</strong>
+              <p className="ml-2 text-[#222831]">{selectedJob.eligibleCourses}</p>
+            </div>
 
-          <div className="mb-6">
-            <strong>🎓 Eligible Courses:</strong>
-            <p className="ml-2 text-[#222831]">{selectedJob.eligibleCourses}</p>
+            <div className="flex gap-8">
+              <button
+                onClick={() => navigate("/students")}
+                className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#494e57] transition"
+              >
+                Candidate-List
+              </button>
+              <button
+                onClick={handleAssignToSubVendor}
+                className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#494e57] transition"
+              >
+                Send to sub vendor
+              </button>
+            </div>
           </div>
-
-          <div className="flex gap-8">
-            <button
-              onClick={() => navigate("/students")}
-              className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#494e57] transition"
-            >
-              Candidate-List
-            </button>
-            <button
-              onClick={() => {
-                const { id, title, ctc, overview, description, criteria, eligibleCourses, location, datePosted, skills } = selectedJob;
-                const jobForSubVendor = { id, title, ctc, overview, description, criteria, eligibleCourses, location, datePosted, skills };
-                const existingJobs = JSON.parse(localStorage.getItem("subVendorJobs")) || [];
-                const updatedJobs = [
-                  ...existingJobs.filter((j) => j.id !== jobForSubVendor.id),
-                  jobForSubVendor,
-                  
-                ];
-                localStorage.setItem("subVendorJobs", JSON.stringify(updatedJobs));
-                navigate("/subvendor-list");
-              }}
-              className="bg-[#393e46] text-[#dfd0b8] px-6 py-2 rounded hover:bg-[#494e57] transition"
-            >
-              Send to sub vendor
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default JobDashboard;
+
 
