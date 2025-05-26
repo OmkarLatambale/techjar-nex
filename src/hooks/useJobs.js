@@ -1,27 +1,24 @@
-// hooks/useJobs.js
 import { useState, useEffect } from "react";
-import { fetchJobs } from "../services/jobService";
+import { getJobsForVendor } from "../services/jobService";
 
 export const useJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const loadJobs = async () => {
-      setLoading(true);
-      setError(null);
+    const fetchJobs = async () => {
       try {
-        const data = await fetchJobs();
+        const data = await getJobsForVendor();
         setJobs(data);
-      } catch (err) {
-        setError(err.message || "Failed to load jobs");
+      } catch {
+        setError("Failed to load jobs");
       } finally {
         setLoading(false);
       }
     };
 
-    loadJobs();
+    fetchJobs();
   }, []);
 
   return { jobs, loading, error };

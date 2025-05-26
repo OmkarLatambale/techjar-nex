@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SuccessAnimation from "./SuccessAnimation";
 import { useJobDescription } from "../hooks/useJobDescription";
+import { postJob } from "../services/jobService";
 
 import ReactMarkdown from "react-markdown"; // <- ✅ ADD THIS
 
@@ -35,27 +36,20 @@ const Jobpost = () => {
     setHasGenerated(true);
   };
 
-  const handlePostJob = () => {
-    const newJob = {
-      id: Date.now(),
-      company: organization_name,
-      email,
-      job_title: job_title,
-      skills: skills.split(",").map((s) => s.trim()),
-      location,
-      ctc,
-      eligibility_criteria,
-      description: generatedDesc,
-      requirements: [requirements],
-    };
+  const handlePostJob = async () => {
+  const newJob = {
+    organization_name,
+    job_title,
+    email,
+    posted_at: new Date().toISOString(),
+    generated_jd: generatedDesc,
+  };
 
-    const existingJobs = JSON.parse(localStorage.getItem("companyJobs")) || [];
-    localStorage.setItem(
-      "companyJobs",
-      JSON.stringify([...existingJobs, newJob])
-    );
-
+  try {
+    await postJob(newJob);
     setShowSuccess(true);
+
+    // Reset the form
     setorganization_name("");
     setEmail("");
     setjob_industry("");
@@ -66,7 +60,11 @@ const Jobpost = () => {
     seteligibility_criteria("");
     setRequirements("");
     setHasGenerated(false);
-  };
+  } catch (error) {
+    console.error("Error posting job:", error);
+    alert("Failed to post job. Please try again.");
+  }
+};
 
   useEffect(() => {
     if (showSuccess) {
