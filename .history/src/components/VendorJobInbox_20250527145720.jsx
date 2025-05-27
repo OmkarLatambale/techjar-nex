@@ -154,89 +154,96 @@ import { useJobs } from "../hooks/useJobs";
 
 const VendorJobInbox = () => {
   const { jobs, loading, error } = useJobs();
-  const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
-  const handleSendToSubvendor = (id) => {
-    alert(`Job ID ${id} sent to subvendor`);
-    // TODO: API call
+  const handleConfirm = (id) => {
+    alert(`Job ID ${id} confirmed for portal.`);
+    // TODO: Call API to update job status if needed
   };
 
-  const handleViewCandidates = (id) => {
-    alert(`Viewing candidates for Job ID ${id}`);
-    // TODO: Navigate or open modal
+  const handleReject = (id) => {
+    alert(`Job ID ${id} rejected.`);
+    // TODO: Call API to update job status or remove job
+  };
+
+  const handleAssign = (id) => {
+    alert(`Job ID ${id} assigned to subvendor.`);
+    // TODO: Call API to assign job to subvendor
   };
 
   return (
-    <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* Scrollable Sidebar */}
-      <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md col-span-1 max-h-[100vh] overflow-y-auto">
-        <h2 className="text-xl font-semibold mb-4 border-b border-[#393e46] pb-2">
-          Job Listings
-        </h2>
+    <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-8">
+      <h1 className="text-3xl font-bold text-[#DFD0B8] mb-6 border-b-2 border-[#393e46] pb-2">
+        Posted Jobs
+      </h1>
 
-        {loading && <p className="text-gray-400">Loading...</p>}
-        {error && <p className="text-red-500">Error: {error}</p>}
-        {!loading && !error && jobs.length === 0 && (
-          <p className="text-gray-400">No jobs found.</p>
-        )}
+      {loading && <div className="text-gray-400 mb-4">Loading jobs...</div>}
+      {error && (
+        <div className="text-red-500 mb-4">Error loading jobs: {error}</div>
+      )}
+      {!loading && !error && jobs.length === 0 && (
+        <div className="text-gray-400">No jobs posted yet.</div>
+      )}
 
-        <ul className="space-y-3">
-          {jobs.map((job) => (
-            <li
-              key={job._id}
-              onClick={() => setSelectedJob(job)}
-              className={`p-3 rounded cursor-pointer hover:bg-[#393e46] ${
-                selectedJob?._id === job._id ? "bg-[#393e46]" : ""
-              }`}
-            >
-              <p className="font-semibold">{job.job_title}</p>
-              <p className="text-sm text-gray-400">{job.organization_name}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Job Detail Panel */}
-      <div className="col-span-2 bg-[#393e46] p-6 rounded-lg shadow-md">
-        {selectedJob ? (
-          <>
-            <h2 className="text-2xl font-bold mb-2">{selectedJob.job_title}</h2>
-            <p className="mb-1">
+      <div className="grid gap-6">
+        {jobs.map((job) => (
+          <div
+            key={job._id}
+            className="bg-[#393e46] text-[#DFD0B8] p-6 rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer"
+            onClick={() =>
+              setSelectedJobId((prev) => (prev === job._id ? null : job._id))
+            }
+          >
+            <h2 className="text-2xl font-semibold mb-2">{job.job_title}</h2>
+            <p>
               <span className="font-semibold">Organization:</span>{" "}
-              {selectedJob.organization_name}
+              {job.organization_name}
             </p>
-            <p className="mb-1">
-              <span className="font-semibold">Email:</span> {selectedJob.email}
+            <p>
+              <span className="font-semibold">Email:</span> {job.email}
             </p>
-            <p className="mb-1">
-              <span className="font-semibold">Posted At:</span>{" "}
-              {new Date(selectedJob.posted_at).toLocaleString()}
+            <p>
+              <span className="font-semibold">Posted:</span>{" "}
+              {new Date(job.posted_at).toLocaleString()}
             </p>
-            <p className="mt-4">
+            <p>
               <span className="font-semibold">Description:</span>{" "}
-              {selectedJob.generated_jd}
+              {job.generated_jd}
             </p>
 
-            <div className="mt-6 flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={() => handleViewCandidates(selectedJob._id)}
-                className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md"
-              >
-                Candidate List
-              </button>
-              <button
-                onClick={() => handleSendToSubvendor(selectedJob._id)}
-                className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md"
-              >
-                Send to Subvendor
-              </button>
-            </div>
-          </>
-        ) : (
-          <p className="text-gray-400">
-            Select a job from the left panel to view details.
-          </p>
-        )}
+            {selectedJobId === job._id && (
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleConfirm(job._id);
+                  }}
+                  className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md transition"
+                >
+                  Confirm Job
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleReject(job._id);
+                  }}
+                  className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md transition"
+                >
+                  Reject Job
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAssign(job._id);
+                  }}
+                  className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md transition"
+                >
+                  Assign to Subvendor
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

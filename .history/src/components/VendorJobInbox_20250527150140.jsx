@@ -168,8 +168,8 @@ const VendorJobInbox = () => {
 
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* Scrollable Sidebar */}
-      <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md col-span-1 max-h-[100vh] overflow-y-auto">
+      {/* Sidebar with Job List */}
+      <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md col-span-1">
         <h2 className="text-xl font-semibold mb-4 border-b border-[#393e46] pb-2">
           Job Listings
         </h2>
