@@ -199,12 +199,9 @@ const VendorDashboard = () => {
       </div>
 
       {/* KPI Cards and Illustration container */}
-      <div
-        className="flex flex-col lg:flex-row justify-between items-start gap-10"
-        style={{ minHeight: "400px" }} // optional, to give some height
-      >
+      <div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-10 flex-wrap">
         {/* KPI Cards Container */}
-        <div className="flex flex-col gap-6 max-w-full lg:max-w-md w-full lg:w-1/2">
+        <div className="flex flex-wrap justify-center gap-6 max-w-full lg:max-w-4xl">
           {[
             {
               label: "Active job listings",
@@ -229,7 +226,7 @@ const VendorDashboard = () => {
               initial="hidden"
               animate="visible"
               variants={cardVariants}
-              className="border border-[#DFD0B8] p-5 sm:p-6 text-center rounded-md hover:shadow-xl hover:scale-105 transition-all duration-300 bg-[#2c303a] backdrop-blur-md w-full"
+              className="border border-[#DFD0B8] p-5 sm:p-6 text-center rounded-md hover:shadow-xl hover:scale-105 transition-all duration-300 bg-[#2c303a] backdrop-blur-md w-full sm:w-72"
               style={{
                 boxShadow: "0 0 12px rgba(223, 208, 184, 0.3)",
               }}
@@ -245,7 +242,7 @@ const VendorDashboard = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5 }}
-          className="w-full lg:w-1/2 max-w-md"
+          className="max-w-xs sm:max-w-sm lg:max-w-md"
         >
           <img
             src="/assets/1.png"
