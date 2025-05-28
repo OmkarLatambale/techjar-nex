@@ -40,7 +40,7 @@ function About() {
           <img
             src="/assets/3.png"
             alt="About NEX.AI"
-            className="w-3/4 md:w-full h-auto max-w-xs sm:max-w-md md:max-w-lg lg:-mr-60"
+            className="w-3/4 md:w-full h-auto max-w-xs sm:max-w-md md:max-w-lg lg:-mr-70"
           />
         </div>
       </div>

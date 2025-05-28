@@ -124,7 +124,7 @@ const Jobpost = () => {
               <textarea
                 value={editableDesc}
                 onChange={(e) => setEditableDesc(e.target.value)}
-                className="flex-1 bg-transparent border border-[#948979] text-[#DFD0B8] rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#DFD0B8] min-h-[400px] w-full"
+                className="flex-1 bg-transparent border border-[#948979] text-[#DFD0B8] rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#DFD0B8] min-h-[400px]"
                 placeholder="Job description will appear here..."
               />
             )}

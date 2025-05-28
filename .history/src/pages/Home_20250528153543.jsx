@@ -18,11 +18,11 @@ const Home = () => {
         </div>
 
         {/* Illustration */}
-        <div className="w-full flex justify-center p-0">
+        <div className="w-full flex justify-center">
           <img
             src="/assets/2.png"
             alt="Hiring Visual"
-            className="w-full max-w-[600px] h-auto lg:-mr-70 "
+            className="w-full max-w-[600px] h-auto -mr-70"
           />
         </div>
       </section>

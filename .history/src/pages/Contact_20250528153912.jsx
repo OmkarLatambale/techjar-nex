@@ -23,7 +23,7 @@ function Contact() {
   return (
     <div className="relative bg-[#222831] flex flex-col md:flex-row items-center justify-center w-full px-4 sm:px-8 md:px-16 py-16 gap-10 ">
       {/* Contact Us Label */}
-      <h5 className="absolute top-4 left-4 sm:top-8 sm:left-12 border border-[#948979] rounded-3xl text-[#948979] px-4 py-1 text-xs sm:text-sm lg:ml-12">
+      <h5 className="absolute top-4 left-4 sm:top-8 sm:left-12 border border-[#948979] rounded-3xl text-[#948979] px-4 py-1 text-xs sm:text-sm lg:ml-20">
         Contact Us
       </h5>
 
