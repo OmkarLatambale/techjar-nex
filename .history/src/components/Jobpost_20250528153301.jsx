@@ -110,7 +110,7 @@ const Jobpost = () => {
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row gap-10 py-12">
         {/* Left: Preview + Post */}
-        <div className="w-full lg:w-1/2 flex flex-col">
+        <div className="w-full flex flex-col">
           <div className="bg-[#2b2f38] w-full rounded-lg p-4 sm:p-6 text-sm min-h-[300px]">
             <strong className="block mb-2 text-[#948979]">
               Generated Job Description:
@@ -124,7 +124,7 @@ const Jobpost = () => {
               <textarea
                 value={editableDesc}
                 onChange={(e) => setEditableDesc(e.target.value)}
-                className="flex-1 bg-transparent border border-[#948979] text-[#DFD0B8] rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#DFD0B8] min-h-[400px] w-full"
+                className="flex-1 bg-transparent border border-[#948979] text-[#DFD0B8] rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#DFD0B8] min-h-[350px]"
                 placeholder="Job description will appear here..."
               />
             )}

@@ -22,7 +22,7 @@ const Home = () => {
           <img
             src="/assets/2.png"
             alt="Hiring Visual"
-            className="w-full max-w-[600px] h-auto lg:-mr-70 "
+            className="w-full max-w-[600px] h-auto lg:-mr-80 "
           />
         </div>
       </section>
