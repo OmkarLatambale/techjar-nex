@@ -1,3 +1,4 @@
+// hooks/useKpis.js
 import { useState, useEffect } from "react";
 import { fetchKPIs } from "../services/kpiService";
 
@@ -13,7 +14,6 @@ const useKpis = () => {
 
   useEffect(() => {
     const loadKPIs = async () => {
-      setLoading(true);
       try {
         const data = await fetchKPIs();
         setKpis(data);
@@ -24,6 +24,7 @@ const useKpis = () => {
         setLoading(false);
       }
     };
+
     loadKPIs();
   }, []);
 

@@ -113,8 +113,8 @@ const Jobpost = () => {
       <div className="flex flex-col lg:flex-row gap-10 px-10 py-12">
         {/* Left: Preview + Post */}
         <div className="w-full lg:w-1/2 flex flex-col">
-          <div className="bg-[#2b2f38] rounded-lg p-6 text-sm min-h-[300px]">
-            <strong className="block mb-2 text-[#948979]">
+          <div className="bg-[#2b2f38] rounded-lg p-6 text-sm min-h-[500px] flex flex-col">
+            <strong className="block mb-3 text-[#948979]">
               Generated Job Description:
             </strong>
 
@@ -124,9 +124,10 @@ const Jobpost = () => {
               <p className="text-red-400">Error: {error}</p>
             ) : (
               <textarea
-                className="w-full bg-[#1e1e24] text-white p-2 rounded-md min-h-[200px]"
                 value={editableDesc}
                 onChange={(e) => setEditableDesc(e.target.value)}
+                className="flex-1 bg-transparent border border-[#948979] text-[#DFD0B8] rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#DFD0B8] min-h-[350px]"
+                placeholder="Job description will appear here..."
               />
             )}
           </div>
@@ -221,7 +222,7 @@ const Jobpost = () => {
             disabled={loading}
             className="w-full bg-transparent border border-[#948979] hover:bg-[#393E46] py-2 rounded-full"
           >
-            {loading ? "Generating..." : "Generate Job"}
+            {loading ? "Generating..." : "Generate Job Description"}
           </button>
         </form>
       </div>
