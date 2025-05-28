@@ -115,17 +115,16 @@ const Jobpost = () => {
             <strong className="block mb-2 text-[#948979]">
               Generated Job Description:
             </strong>
-            
+
             {loading ? (
               <p className="text-yellow-400">Generating job description...</p>
             ) : error ? (
               <p className="text-red-400">Error: {error}</p>
             ) : (
               <textarea
+                className="w-full bg-[#1e1e24] text-white p-2 rounded-md min-h-[200px]"
                 value={editableDesc}
                 onChange={(e) => setEditableDesc(e.target.value)}
-                className="flex-1 bg-transparent border border-[#948979] text-[#DFD0B8] rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#DFD0B8] min-h-[350px]"
-                placeholder="Job description will appear here..."
               />
             )}
           </div>
@@ -218,7 +217,7 @@ const Jobpost = () => {
             disabled={loading}
             className="w-full bg-transparent border border-[#948979] hover:bg-[#393E46] py-2 rounded-full"
           >
-            {loading ? "Generating..." : "Generate Job Description"}
+            {loading ? "Generating..." : "Generate Job"}
           </button>
         </form>
       </div>
