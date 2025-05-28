@@ -100,21 +100,26 @@
 // };
 
 // export default VendorDashboard;
+
 import React, { useEffect, useState } from "react";
 import { fetchKPIs } from "../services/kpiService";
 import { UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 const VendorDashboard = () => {
   const navigate = useNavigate();
+
+  // KPI state
   const [kpis, setKpis] = useState({
-    activeListings: 0,
-    totalJobsPosted: 0,
-    candidatesInPipeline: 0,
-    applicationsProcessed: 0,
+    active_job_listings: 0,
+    total_job_openings: 0,
+    candidates_in_pipeline: 0,
+    applications_processed: 0,
   });
 
+  // Load KPI data from backend on mount
   useEffect(() => {
     const loadKPIs = async () => {
       try {
@@ -127,6 +132,7 @@ const VendorDashboard = () => {
     loadKPIs();
   }, []);
 
+  // Animation variants
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
@@ -161,7 +167,7 @@ const VendorDashboard = () => {
         </div>
 
         {/* Right: Jobs + Vendor */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -171,7 +177,7 @@ const VendorDashboard = () => {
             Jobs
           </motion.button>
 
-          {/* Hoverable Dropdown for Vendor */}
+          {/* User Dropdown */}
           <div className="relative group">
             <motion.div
               initial={{ x: 50, opacity: 0 }}
@@ -183,13 +189,14 @@ const VendorDashboard = () => {
             </motion.div>
 
             {/* Dropdown */}
-            <div className="absolute right-0 mt-2 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible w-28 sm:w-32">
+            <div className="absolute right-0 mt-2 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible">
+              {" "}
               <div
                 onClick={() => {
                   // Replace with your actual logout logic
                   navigate("/login");
                 }}
-                className="text-center text-sm px-3 py-1 hover:bg-[#3c4049] cursor-pointer w-full rounded"
+                className="text-center text-sm px-3 py-1 hover:bg-[#3c4049] cursor-pointer w-full"
               >
                 Logout
               </div>
@@ -198,30 +205,14 @@ const VendorDashboard = () => {
         </div>
       </div>
 
-      {/* KPI Cards and Illustration container */}
-      <div
-        className="flex flex-col lg:flex-row justify-between items-start gap-10"
-        style={{ minHeight: "400px" }} // optional, to give some height
-      >
-        {/* KPI Cards Container */}
-        <div className="flex flex-col gap-6 max-w-full lg:max-w-md w-full lg:w-1/2">
+      {/* KPI Cards */}
+      <div className="flex justify-between items-start mt-10 flex-wrap gap-10">
+        <div className="flex flex-col gap-6 w-72 mx-auto">
           {[
-            {
-              label: "Active job listings",
-              value: kpis.activeListings,
-            },
-            {
-              label: "Total number of job openings posted",
-              value: kpis.totalJobsPosted,
-            },
-            {
-              label: "Number of candidates in the pipeline",
-              value: kpis.candidatesInPipeline,
-            },
-            {
-              label: "Applications processed",
-              value: kpis.applicationsProcessed,
-            },
+            { label: "Active job listings", value: kpis.active_job_listings },
+            { label: "Total number of job openings posted", value: kpis.total_job_openings },
+            { label: "Number of candidates in the pipeline", value: kpis.candidates_in_pipeline },
+            { label: "Applications processed", value: kpis.applications_processed },
           ].map((item, index) => (
             <motion.div
               key={index}
@@ -240,7 +231,6 @@ const VendorDashboard = () => {
           ))}
         </div>
 
-        {/* Illustration */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
