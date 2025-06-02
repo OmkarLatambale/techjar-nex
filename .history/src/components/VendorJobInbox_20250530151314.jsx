@@ -157,11 +157,11 @@ const VendorJobInbox = () => {
   const { jobs, loading, error } = useJobs();
   const [selectedJob, setSelectedJob] = useState(null);
   const navigate = useNavigate();
-  const handleSendToSubvendor = (id) => {};
-
-  const handleViewCandidates = (id) => {
-    navigate("/students");
+  const handleSendToSubvendor = () => {
+    navigate(`/students`);
   };
+
+  const handleViewCandidates = (id) => {};
 
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 flex flex-col md:grid md:grid-cols-3 gap-4">
@@ -233,7 +233,7 @@ const VendorJobInbox = () => {
                 Candidate List
               </button>
               <button
-                onClick={() => handleSendToSubvendor(selectedJob._id)}
+                onClick={() => handleSendToSubvendor()}
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
                 Send to Subvendor

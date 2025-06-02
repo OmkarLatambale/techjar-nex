@@ -4,6 +4,7 @@ import SuccessAnimation from "./SuccessAnimation";
 import { useJobDescription } from "../hooks/useJobDescription";
 import { postJob } from "../services/jobService";
 
+
 const Jobpost = () => {
   const [organization_name, setorganization_name] = useState("");
   const [email, setEmail] = useState("");
@@ -84,35 +85,6 @@ const Jobpost = () => {
       .map((line) => `• ${line.trim()}`)
       .join("\n");
   };
-  // const formatAsBullets = (text) => {
-  //   if (!text) return "";
-
-  //   // Extract job_name and company_name with regex
-  //   const jobNameMatch = text.match(/job_name:\s*([^\.]+)\.?/i);
-  //   const companyNameMatch = text.match(/company_name:\s*([^\.]+)\.?/i);
-
-  //   // Remove job_name and company_name parts from the text
-  //   let remainingText = text
-  //     .replace(/job_name:\s*[^\.]+\./i, "")
-  //     .replace(/company_name:\s*[^\.]+\./i, "")
-  //     .trim();
-
-  //   // Split remaining text into sentences/lines to bullet
-  //   const bulletLines = remainingText
-  //     .split(/\.\s*|\n+/)
-  //     .filter((line) => line.trim() !== "")
-  //     .map((line) => `• ${line.trim()}`)
-  //     .join("\n");
-
-  //   // Compose final formatted string
-  //   return [
-  //     jobNameMatch ? `Job Name: ${jobNameMatch[1].trim()}` : "",
-  //     companyNameMatch ? `Company Name: ${companyNameMatch[1].trim()}` : "",
-  //     bulletLines ? `\n${bulletLines}` : "",
-  //   ]
-  //     .filter(Boolean)
-  //     .join("\n");
-  // };
 
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] relative px-4 sm:px-6 md:px-10">
@@ -165,6 +137,63 @@ const Jobpost = () => {
               />
             )}
           </div>
+          {/* <div className="bg-[#2b2f38] w-full rounded-lg p-4 sm:p-6 text-sm min-h-[300px]">
+            <strong className="block mb-2 text-[#948979]">
+              Generated Job Description:
+            </strong>
+
+            <LexicalComposer initialConfig={editorConfig}>
+              <RichTextPlugin
+                contentEditable={<EditorContent />}
+                placeholder={null}
+              />
+              <HistoryPlugin />
+              <ListPlugin />
+              {/* <PrepopulatePlugin /> */}
+              <OnChangePlugin
+                onChange={(editorState) => {
+                  editorState.read(() => {
+                    const selection = $getSelection();
+                    // Do something with editor state if needed
+                  });
+                }}
+              />
+            </LexicalComposer>
+          </div> */}
+
+          {/* <div className="w-full lg:w-1/2 flex flex-col">
+  <div className="bg-[#2b2f38] w-full rounded-lg p-4 sm:p-6 text-sm min-h-[300px]">
+    <strong className="block mb-2 text-[#948979]">
+      Generated Job Description:
+    </strong>
+
+    {loading ? (
+      <p className="text-yellow-400">Generating job description...</p>
+    ) : error ? (
+      <p className="text-red-400">Error: {error}</p>
+    ) : (
+      <ReactQuill
+        value={editableDesc}
+        onChange={setEditableDesc}
+        theme="snow"
+        modules={{
+          toolbar: [
+            ['bold'],
+            [{ list: 'bullet' }],
+            ['clean']
+          ]
+        }}
+        formats={['bold', 'list', 'bullet']}
+        className="bg-[#2b2f38] text-white rounded-md"
+        style={{
+          minHeight: "400px",
+          color: "#DFD0B8",
+          border: "1px solid #948979",
+        }}
+      />
+    )}
+  </div>
+  </div> */}
 
           {hasGenerated && (
             <button

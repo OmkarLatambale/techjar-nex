@@ -160,7 +160,7 @@ const VendorJobInbox = () => {
   const handleSendToSubvendor = (id) => {};
 
   const handleViewCandidates = (id) => {
-    navigate("/students");
+    navigate(`/Student/${id}`);
   };
 
   return (

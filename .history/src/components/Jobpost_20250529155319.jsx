@@ -77,13 +77,13 @@ const Jobpost = () => {
       return () => clearTimeout(timer);
     }
   }, [showSuccess]);
-  const formatAsBullets = (text) => {
-    return text
-      .split(/\.\s+|\n+/) // Split by period or newline
-      .filter((line) => line.trim() !== "")
-      .map((line) => `• ${line.trim()}`)
-      .join("\n");
-  };
+  // const formatAsBullets = (text) => {
+  //   return text
+  //     .split(/\.\s+|\n+/) // Split by period or newline
+  //     .filter((line) => line.trim() !== "")
+  //     .map((line) => `• ${line.trim()}`)
+  //     .join("\n");
+  // };
   // const formatAsBullets = (text) => {
   //   if (!text) return "";
 
