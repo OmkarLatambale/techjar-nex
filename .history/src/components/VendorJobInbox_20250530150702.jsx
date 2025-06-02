@@ -157,11 +157,11 @@ const VendorJobInbox = () => {
   const { jobs, loading, error } = useJobs();
   const [selectedJob, setSelectedJob] = useState(null);
   const navigate = useNavigate();
-  const handleSendToSubvendor = (id) => {};
-
-  const handleViewCandidates = (id) => {
-    navigate("/students");
+  const handleSendToSubvendor = (id) => {
+    navigate(`/StudentList/${id}`);
   };
+
+  const handleViewCandidates = (id) => {};
 
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 flex flex-col md:grid md:grid-cols-3 gap-4">

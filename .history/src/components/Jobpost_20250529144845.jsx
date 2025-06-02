@@ -84,35 +84,6 @@ const Jobpost = () => {
       .map((line) => `• ${line.trim()}`)
       .join("\n");
   };
-  // const formatAsBullets = (text) => {
-  //   if (!text) return "";
-
-  //   // Extract job_name and company_name with regex
-  //   const jobNameMatch = text.match(/job_name:\s*([^\.]+)\.?/i);
-  //   const companyNameMatch = text.match(/company_name:\s*([^\.]+)\.?/i);
-
-  //   // Remove job_name and company_name parts from the text
-  //   let remainingText = text
-  //     .replace(/job_name:\s*[^\.]+\./i, "")
-  //     .replace(/company_name:\s*[^\.]+\./i, "")
-  //     .trim();
-
-  //   // Split remaining text into sentences/lines to bullet
-  //   const bulletLines = remainingText
-  //     .split(/\.\s*|\n+/)
-  //     .filter((line) => line.trim() !== "")
-  //     .map((line) => `• ${line.trim()}`)
-  //     .join("\n");
-
-  //   // Compose final formatted string
-  //   return [
-  //     jobNameMatch ? `Job Name: ${jobNameMatch[1].trim()}` : "",
-  //     companyNameMatch ? `Company Name: ${companyNameMatch[1].trim()}` : "",
-  //     bulletLines ? `\n${bulletLines}` : "",
-  //   ]
-  //     .filter(Boolean)
-  //     .join("\n");
-  // };
 
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] relative px-4 sm:px-6 md:px-10">

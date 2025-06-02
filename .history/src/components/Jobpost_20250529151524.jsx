@@ -3,6 +3,41 @@ import { Link } from "react-router-dom";
 import SuccessAnimation from "./SuccessAnimation";
 import { useJobDescription } from "../hooks/useJobDescription";
 import { postJob } from "../services/jobService";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+
+import { ListItemNode, ListNode } from "@lexical/list";
+import { HeadingNode } from "@lexical/rich-text";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $getRoot, $getSelection } from "lexical";
+
+const theme = {
+  paragraph: "text-[#DFD0B8] mb-2",
+  list: {
+    listitem: "text-[#DFD0B8] list-disc ml-6",
+  },
+};
+
+function EditorContent() {
+  return (
+    <ContentEditable
+      className="flex-1 bg-transparent border border-[#948979] text-[#DFD0B8] rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#DFD0B8] min-h-[400px] w-full"
+      placeholder="Job description will appear here..."
+    />
+  );
+}
+const editorConfig = {
+  namespace: "JobDescriptionEditor",
+  theme,
+  onError: (error) => {
+    console.error("Lexical Error:", error);
+  },
+  nodes: [HeadingNode, ListNode, ListItemNode],
+};
 
 const Jobpost = () => {
   const [organization_name, setorganization_name] = useState("");
@@ -84,35 +119,6 @@ const Jobpost = () => {
       .map((line) => `• ${line.trim()}`)
       .join("\n");
   };
-  // const formatAsBullets = (text) => {
-  //   if (!text) return "";
-
-  //   // Extract job_name and company_name with regex
-  //   const jobNameMatch = text.match(/job_name:\s*([^\.]+)\.?/i);
-  //   const companyNameMatch = text.match(/company_name:\s*([^\.]+)\.?/i);
-
-  //   // Remove job_name and company_name parts from the text
-  //   let remainingText = text
-  //     .replace(/job_name:\s*[^\.]+\./i, "")
-  //     .replace(/company_name:\s*[^\.]+\./i, "")
-  //     .trim();
-
-  //   // Split remaining text into sentences/lines to bullet
-  //   const bulletLines = remainingText
-  //     .split(/\.\s*|\n+/)
-  //     .filter((line) => line.trim() !== "")
-  //     .map((line) => `• ${line.trim()}`)
-  //     .join("\n");
-
-  //   // Compose final formatted string
-  //   return [
-  //     jobNameMatch ? `Job Name: ${jobNameMatch[1].trim()}` : "",
-  //     companyNameMatch ? `Company Name: ${companyNameMatch[1].trim()}` : "",
-  //     bulletLines ? `\n${bulletLines}` : "",
-  //   ]
-  //     .filter(Boolean)
-  //     .join("\n");
-  // };
 
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] relative px-4 sm:px-6 md:px-10">
@@ -147,7 +153,7 @@ const Jobpost = () => {
       <div className="flex flex-col lg:flex-row gap-10 py-12">
         {/* Left: Preview + Post */}
         <div className="w-full lg:w-1/2 flex flex-col">
-          <div className="bg-[#2b2f38] w-full rounded-lg p-4 sm:p-6 text-sm min-h-[300px]">
+          {/* <div className="bg-[#2b2f38] w-full rounded-lg p-4 sm:p-6 text-sm min-h-[300px]">
             <strong className="block mb-2 text-[#948979]">
               Generated Job Description:
             </strong>
@@ -164,7 +170,64 @@ const Jobpost = () => {
                 placeholder="Job description will appear here..."
               />
             )}
+          </div> */}
+          <div className="bg-[#2b2f38] w-full rounded-lg p-4 sm:p-6 text-sm min-h-[300px]">
+            <strong className="block mb-2 text-[#948979]">
+              Generated Job Description:
+            </strong>
+
+            <LexicalComposer initialConfig={editorConfig}>
+              <RichTextPlugin
+                contentEditable={<EditorContent />}
+                placeholder={null}
+              />
+              <HistoryPlugin />
+              <ListPlugin />
+              <PrepopulatePlugin />
+              <OnChangePlugin
+                onChange={(editorState) => {
+                  editorState.read(() => {
+                    const selection = $getSelection();
+                    // Do something with editor state if needed
+                  });
+                }}
+              />
+            </LexicalComposer>
           </div>
+
+          {/* <div className="w-full lg:w-1/2 flex flex-col">
+  <div className="bg-[#2b2f38] w-full rounded-lg p-4 sm:p-6 text-sm min-h-[300px]">
+    <strong className="block mb-2 text-[#948979]">
+      Generated Job Description:
+    </strong>
+
+    {loading ? (
+      <p className="text-yellow-400">Generating job description...</p>
+    ) : error ? (
+      <p className="text-red-400">Error: {error}</p>
+    ) : (
+      <ReactQuill
+        value={editableDesc}
+        onChange={setEditableDesc}
+        theme="snow"
+        modules={{
+          toolbar: [
+            ['bold'],
+            [{ list: 'bullet' }],
+            ['clean']
+          ]
+        }}
+        formats={['bold', 'list', 'bullet']}
+        className="bg-[#2b2f38] text-white rounded-md"
+        style={{
+          minHeight: "400px",
+          color: "#DFD0B8",
+          border: "1px solid #948979",
+        }}
+      />
+    )}
+  </div>
+  </div> */}
 
           {hasGenerated && (
             <button

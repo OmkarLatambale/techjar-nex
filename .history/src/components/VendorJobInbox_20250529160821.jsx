@@ -150,17 +150,19 @@
 // export default VendorJobInbox;
 import React, { useState } from "react";
 import { useJobs } from "../hooks/useJobs";
-import { useNavigate } from "react-router-dom";
-import { nav } from "framer-motion/client";
 
 const VendorJobInbox = () => {
   const { jobs, loading, error } = useJobs();
   const [selectedJob, setSelectedJob] = useState(null);
-  const navigate = useNavigate();
-  const handleSendToSubvendor = (id) => {};
+
+  const handleSendToSubvendor = (id) => {
+    alert(`Job ID ${id} sent to subvendor`);
+    // TODO: API call
+  };
 
   const handleViewCandidates = (id) => {
-    navigate("/students");
+    alert(`Viewing candidates for Job ID ${id}`);
+    // TODO: Navigate or open modal
   };
 
   return (
@@ -212,10 +214,8 @@ const VendorJobInbox = () => {
               {new Date(selectedJob.posted_at).toLocaleString()}
             </p>
             <div className="mt-4 text-sm md:text-base">
-              <span className="font-semibold block mb-1 text-[#DFD0B8]">
-                Description:
-              </span>
-              <ul className="list-disc pl-6 space-y-1 text-[#DFD0B8]">
+              <span className="font-semibold block mb-1">Description:</span>
+              <ul className="list-disc pl-5 space-y-1 text-[#DFD0B8]">
                 {selectedJob.generated_jd
                   .split(/\.\s*|\n+/)
                   .filter((line) => line.trim() !== "")

@@ -150,17 +150,19 @@
 // export default VendorJobInbox;
 import React, { useState } from "react";
 import { useJobs } from "../hooks/useJobs";
-import { useNavigate } from "react-router-dom";
-import { nav } from "framer-motion/client";
 
 const VendorJobInbox = () => {
   const { jobs, loading, error } = useJobs();
   const [selectedJob, setSelectedJob] = useState(null);
-  const navigate = useNavigate();
-  const handleSendToSubvendor = (id) => {};
+
+  const handleSendToSubvendor = (id) => {
+    alert(`Job ID ${id} sent to subvendor`);
+    // TODO: API call
+  };
 
   const handleViewCandidates = (id) => {
-    navigate("/students");
+    alert(`Viewing candidates for Job ID ${id}`);
+    // TODO: Navigate or open modal
   };
 
   return (
