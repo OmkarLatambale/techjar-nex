@@ -152,6 +152,14 @@ const StudentList = () => {
     alert(`Mail sent to all: ${allEmails}`);
   };
 
+  const handleUpload = () => {
+    // if (!jobId) {
+    //   alert("Job ID not found. Please navigate properly.");
+    //   return;
+    // }
+    navigate("/upload", { state: { jobId } });
+  };
+
   return (
     <div className="min-h-screen p-6 bg-[#222831] text-[#DFD0B8]">
       <div className="flex items-center justify-between mb-10">
@@ -166,6 +174,12 @@ const StudentList = () => {
             className="bg-[#393e46] px-4 py-2 rounded-md hover:bg-[#555]"
           >
             Send All Mail
+          </button>
+          <button
+            onClick={handleUpload}
+            className="bg-[#393e46] px-4 py-2 rounded-md hover:bg-[#555]"
+          >
+            Upload Resumes
           </button>
         </div>
       </div>

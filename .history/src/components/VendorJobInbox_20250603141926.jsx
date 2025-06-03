@@ -270,8 +270,11 @@ const VendorJobInbox = () => {
     navigate("/students");
   };
   const handleUpload = (id) => {
-    console.log("Navigating with jobId:", id);
-    navigate("/upload", { state: { jobId: id } });
+    // if (!jobId) {
+    //   alert("Job ID not found. Please navigate properly.");
+    //   return;
+    // }
+    navigate("/upload", { state: { jobId } });
   };
 
   return (
@@ -308,11 +311,6 @@ const VendorJobInbox = () => {
       <div className="md:col-span-2 bg-[#393e46] p-6 rounded-lg shadow-md flex-grow overflow-auto">
         {selectedJob ? (
           <>
-            {/* {console.log(
-              "Selected job before upload:",
-              selectedJob.organization_name
-            )} */}
-            {console.log("Selected job before upload:", selectedJob.id)}
             <h2 className="text-2xl md:text-3xl font-bold mb-2">
               {selectedJob.job_title}
             </h2>
@@ -349,13 +347,13 @@ const VendorJobInbox = () => {
                 Candidate List
               </button>
               <button
-                onClick={() => handleSendToSubvendor(selectedJob.id)}
+                onClick={() => handleSendToSubvendor(selectedJob._id)}
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
                 Send to Subvendor
               </button>
               <button
-                onClick={() => handleUpload(selectedJob.id)}
+                onClick={handleUpload}
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
                 Upload Resumes

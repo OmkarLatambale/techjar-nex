@@ -11,7 +11,6 @@ import VendorJobInbox from "./components/VendorJobInbox";
 import StudentList from "./components/StudentList";
 import SubVendorDashboard from "./components/SubVendorDashboard";
 import SubVendorList from "./components/SubVendorList";
-import FileUpload from "./components/FileUpload";
 
 function App() {
   return (
@@ -28,7 +27,6 @@ function App() {
         <Route path="/vendor-dashboard" element={<VendorDashboard />} />
         <Route path="/vendor-jobs" element={<VendorJobInbox />} />
         <Route path="/subvendor-list" element={<SubVendorList />} />
-        <Route path="/upload" element={<FileUpload />} />
       </Routes>
     </BrowserRouter>
   );

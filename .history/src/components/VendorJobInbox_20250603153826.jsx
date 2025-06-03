@@ -308,11 +308,11 @@ const VendorJobInbox = () => {
       <div className="md:col-span-2 bg-[#393e46] p-6 rounded-lg shadow-md flex-grow overflow-auto">
         {selectedJob ? (
           <>
-            {/* {console.log(
+            {console.log(
               "Selected job before upload:",
               selectedJob.organization_name
-            )} */}
-            {console.log("Selected job before upload:", selectedJob.id)}
+            )}
+            {console.log("Selected job before upload:", selectedJob._id)}
             <h2 className="text-2xl md:text-3xl font-bold mb-2">
               {selectedJob.job_title}
             </h2>

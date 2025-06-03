@@ -148,111 +148,6 @@
 // };
 
 // export default VendorJobInbox;
-
-// import React, { useState } from "react";
-// import { useJobs } from "../hooks/useJobs";
-// import { useNavigate } from "react-router-dom";
-// import { nav } from "framer-motion/client";
-
-// const VendorJobInbox = () => {
-//   const { jobs, loading, error } = useJobs();
-//   const [selectedJob, setSelectedJob] = useState(null);
-//   const navigate = useNavigate();
-//   const handleSendToSubvendor = (id) => {};
-
-//   const handleViewCandidates = (id) => {
-//     navigate("/students", { state: { jobId: id } });
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 flex flex-col md:grid md:grid-cols-3 gap-4">
-//       {/* Scrollable Sidebar */}
-//       <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md md:col-span-1 max-h-[40vh] md:max-h-[100vh] overflow-y-auto">
-//         <h2 className="text-xl font-semibold mb-4 border-b border-[#393e46] pb-2">
-//           Job Listings
-//         </h2>
-
-//         {loading && <p className="text-gray-400">Loading...</p>}
-//         {error && <p className="text-red-500">Error: {error}</p>}
-//         {!loading && !error && jobs.length === 0 && (
-//           <p className="text-gray-400">No jobs found.</p>
-//         )}
-
-//         <ul className="space-y-3">
-//           {jobs.map((job) => (
-//             <li
-//               key={job._id}
-//               onClick={() => setSelectedJob(job)}
-//               className={`p-3 rounded cursor-pointer hover:bg-[#393e46] ${
-//                 selectedJob?._id === job._id ? "bg-[#393e46]" : ""
-//               }`}
-//             >
-//               <p className="font-semibold">{job.job_title}</p>
-//               <p className="text-sm text-gray-400">{job.organization_name}</p>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-
-//       {/* Job Detail Panel */}
-//       <div className="md:col-span-2 bg-[#393e46] p-6 rounded-lg shadow-md flex-grow overflow-auto">
-//         {selectedJob ? (
-//           <>
-//             <h2 className="text-2xl md:text-3xl font-bold mb-2">
-//               {selectedJob.job_title}
-//             </h2>
-//             <p className="mb-1 text-sm md:text-base">
-//               <span className="font-semibold">Organization:</span>{" "}
-//               {selectedJob.organization_name}
-//             </p>
-//             <p className="mb-1 text-sm md:text-base">
-//               <span className="font-semibold">Email:</span> {selectedJob.email}
-//             </p>
-//             <p className="mb-1 text-sm md:text-base">
-//               <span className="font-semibold">Posted At:</span>{" "}
-//               {new Date(selectedJob.posted_at).toLocaleString()}
-//             </p>
-//             <div className="mt-4 text-sm md:text-base">
-//               <span className="font-semibold block mb-1 text-[#DFD0B8]">
-//                 Description:
-//               </span>
-//               <ul className="list-disc pl-6 space-y-1 text-[#DFD0B8]">
-//                 {selectedJob.generated_jd
-//                   .split(/\.\s*|\n+/)
-//                   .filter((line) => line.trim() !== "")
-//                   .map((line, index) => (
-//                     <li key={index}>{line.trim()}</li>
-//                   ))}
-//               </ul>
-//             </div>
-
-//             <div className="mt-6 flex flex-col sm:flex-row gap-4">
-//               <button
-//                 onClick={() => handleViewCandidates(selectedJob._id)}
-//                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
-//               >
-//                 Candidate List
-//               </button>
-//               <button
-//                 onClick={() => handleSendToSubvendor(selectedJob._id)}
-//                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
-//               >
-//                 Send to Subvendor
-//               </button>
-//             </div>
-//           </>
-//         ) : (
-//           <p className="text-gray-400 text-center md:text-left">
-//             Select a job from the left panel to view details.
-//           </p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default VendorJobInbox;
-
 import React, { useState } from "react";
 import { useJobs } from "../hooks/useJobs";
 import { useNavigate } from "react-router-dom";
@@ -262,21 +157,12 @@ const VendorJobInbox = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const navigate = useNavigate();
 
-  const handleSendToSubvendor = (id) => {
-    alert(`Send to subvendor clicked for job ID: ${id}`);
-  };
-
-  const handleViewCandidates = () => {
-    navigate("/students");
-  };
-  const handleUpload = (id) => {
-    console.log("Navigating with jobId:", id);
-    navigate("/upload", { state: { jobId: id } });
+  const handleViewCandidates = (id) => {
+    navigate(`/students/${id}`);
   };
 
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 flex flex-col md:grid md:grid-cols-3 gap-4">
-      {/* Sidebar */}
       <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md md:col-span-1 max-h-[40vh] md:max-h-[100vh] overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4 border-b border-[#393e46] pb-2">
           Job Listings
@@ -304,39 +190,33 @@ const VendorJobInbox = () => {
         </ul>
       </div>
 
-      {/* Job Details */}
       <div className="md:col-span-2 bg-[#393e46] p-6 rounded-lg shadow-md flex-grow overflow-auto">
         {selectedJob ? (
           <>
-            {/* {console.log(
-              "Selected job before upload:",
-              selectedJob.organization_name
-            )} */}
-            {console.log("Selected job before upload:", selectedJob.id)}
             <h2 className="text-2xl md:text-3xl font-bold mb-2">
               {selectedJob.job_title}
             </h2>
-            <p className="mb-1">
-              <strong>Organization:</strong> {selectedJob.organization_name}
+            <p className="mb-1 text-sm md:text-base">
+              <span className="font-semibold">Organization:</span>{" "}
+              {selectedJob.organization_name}
             </p>
-            <p className="mb-1">
-              <strong>Email:</strong> {selectedJob.email}
+            <p className="mb-1 text-sm md:text-base">
+              <span className="font-semibold">Email:</span> {selectedJob.email}
             </p>
-            <p className="mb-1">
-              <strong>Posted At:</strong>{" "}
+            <p className="mb-1 text-sm md:text-base">
+              <span className="font-semibold">Posted At:</span>{" "}
               {new Date(selectedJob.posted_at).toLocaleString()}
             </p>
-
-            <div className="mt-4">
-              <h3 className="font-semibold mb-2 text-[#DFD0B8]">
+            <div className="mt-4 text-sm md:text-base">
+              <span className="font-semibold block mb-1 text-[#DFD0B8]">
                 Description:
-              </h3>
-              <ul className="list-disc pl-6 space-y-1">
+              </span>
+              <ul className="list-disc pl-6 space-y-1 text-[#DFD0B8]">
                 {selectedJob.generated_jd
                   .split(/\.\s*|\n+/)
                   .filter((line) => line.trim() !== "")
-                  .map((line, idx) => (
-                    <li key={idx}>{line.trim()}</li>
+                  .map((line, index) => (
+                    <li key={index}>{line.trim()}</li>
                   ))}
               </ul>
             </div>
@@ -349,16 +229,10 @@ const VendorJobInbox = () => {
                 Candidate List
               </button>
               <button
-                onClick={() => handleSendToSubvendor(selectedJob.id)}
+                onClick={() => alert("Send to Subvendor functionality")}
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
                 Send to Subvendor
-              </button>
-              <button
-                onClick={() => handleUpload(selectedJob.id)}
-                className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
-              >
-                Upload Resumes
               </button>
             </div>
           </>
