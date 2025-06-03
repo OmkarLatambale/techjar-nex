@@ -11,14 +11,12 @@ import VendorJobInbox from "./components/VendorJobInbox";
 import StudentList from "./components/StudentList";
 import SubVendorDashboard from "./components/SubVendorDashboard";
 import SubVendorList from "./components/SubVendorList";
-import FileUpload from "./components/FileUpload";
-
+import StudentListWrapper from "./components/StudentListWrapper";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -28,7 +26,8 @@ function App() {
         <Route path="/vendor-dashboard" element={<VendorDashboard />} />
         <Route path="/vendor-jobs" element={<VendorJobInbox />} />
         <Route path="/subvendor-list" element={<SubVendorList />} />
-        <Route path="/upload" element={<FileUpload />} />
+        <Route path="/" element={<JobList />} />
+        <Route path="/candidates/:jobId" element={<StudentList />} />
       </Routes>
     </BrowserRouter>
   );

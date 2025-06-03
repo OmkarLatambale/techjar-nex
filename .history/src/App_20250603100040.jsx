@@ -28,7 +28,7 @@ function App() {
         <Route path="/vendor-dashboard" element={<VendorDashboard />} />
         <Route path="/vendor-jobs" element={<VendorJobInbox />} />
         <Route path="/subvendor-list" element={<SubVendorList />} />
-        <Route path="/upload" element={<FileUpload />} />
+        <Route path="/file-upload" element={<FileUpload />} />
       </Routes>
     </BrowserRouter>
   );
