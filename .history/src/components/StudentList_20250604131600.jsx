@@ -183,7 +183,7 @@ const StudentList = () => {
             onClick={handleSendMailToAll}
             className="bg-[#393e46] px-4 py-2 rounded-md hover:bg-[#555]"
           >
-            Send All
+            Send All Mail
           </button>
         </div>
       </div>

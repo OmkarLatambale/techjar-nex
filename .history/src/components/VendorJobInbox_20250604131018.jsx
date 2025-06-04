@@ -267,7 +267,7 @@ const VendorJobInbox = () => {
   };
 
   const handleViewCandidates = (organization_name) => {
-    navigate("/students", { state: { organizationName: organization_name } });
+    navigate("/students", { state: { organization_name } });
   };
   const handleUpload = (id) => {
     console.log("Navigating with jobId:", id);
