@@ -183,7 +183,7 @@ const StudentList = () => {
             onClick={handleSendMailToAll}
             className="bg-[#393e46] px-4 py-2 rounded-md hover:bg-[#555]"
           >
-            Send All
+            Send All Mail
           </button>
         </div>
       </div>
@@ -204,9 +204,9 @@ const StudentList = () => {
               Match Score: {student.match_score || "N/A"}
             </p>
             <p className="text-sm">Match Status: {student.status || "N/A"}</p>
-            {/* <a className="text-sm " href={student.resume}>
+            <a className="text-sm " href={student.resume}>
               Interview Link
-            </a> */}
+            </a>
 
             {/* <a
               href={student.resume}
