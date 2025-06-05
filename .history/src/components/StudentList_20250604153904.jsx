@@ -4,6 +4,7 @@ import axios from "axios";
 
 const StudentList = () => {
   const location = useLocation();
+  const organizationName = location.state?.organizationName;
   const jobId = location.state?.jobId;
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,6 @@ const StudentList = () => {
           : data;
 
         const formatted = filtered.map((item) => ({
-          id: item.id,
           name: item.user_name,
           email: item.email,
           contact: item.phone_number,
@@ -43,16 +43,8 @@ const StudentList = () => {
     fetchStudents();
   }, [jobId]);
 
-  const handleSendMail = async (matchResultId, email) => {
-    try {
-      await axios.post(
-        `https://ibot-backend.onrender.com/jobs/send-email/?id=${matchResultId}`
-      );
-      alert(`Mail sent to ${email}`);
-    } catch (error) {
-      console.error("Failed to send email", error);
-      alert(`Failed to send email to ${email}`);
-    }
+  const handleSendMail = (email) => {
+    alert(`Mail sent to ${email}`);
   };
 
   const handleSendMailToAll = () => {
@@ -95,26 +87,20 @@ const StudentList = () => {
             <p className="text-sm">Match Score: {student.match_score}</p>
             <p className="text-sm">Match Status: {student.status}</p>
             <div className="flex gap-2 mt-3">
-              {/* <a
+              <a
                 href={student.resume}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 underline text-sm"
               >
                 View Resume
-              </a> */}
-              {["shortlisted", "strong Match"].includes(student.status) ? (
-                <button
-                  onClick={() => handleSendMail(student.id, student.email)}
-                  className="mt-2 bg-[#00ADB5] text-white px-3 py-1 rounded hover:bg-[#008891]"
-                >
-                  Send Mail
-                </button>
-              ) : (
-                <p className="text-red-400 mt-2 text-sm">
-                  Not eligible for mailing
-                </p>
-              )}
+              </a>
+              <button
+                onClick={() => handleSendMail(student.email)}
+                className="text-sm bg-[#00ADB5] px-3 py-1 rounded hover:bg-[#008891] text-white"
+              >
+                Send Mail
+              </button>
             </div>
           </div>
         ))}

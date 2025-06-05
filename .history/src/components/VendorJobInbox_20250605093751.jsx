@@ -343,7 +343,9 @@ const VendorJobInbox = () => {
 
             <div className="mt-6 flex flex-col sm:flex-row gap-4">
               <button
-                onClick={() => handleViewCandidates(selectedJob.id)}
+                onClick={() =>
+                  handleViewCandidates(selectedJob.organization_name)
+                }
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
                 Candidate List

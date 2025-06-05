@@ -103,7 +103,7 @@ const StudentList = () => {
               >
                 View Resume
               </a> */}
-              {["shortlisted", "strong Match"].includes(student.status) ? (
+              {["Shortlisted", "Strong Match"].includes(student.status) ? (
                 <button
                   onClick={() => handleSendMail(student.id, student.email)}
                   className="mt-2 bg-[#00ADB5] text-white px-3 py-1 rounded hover:bg-[#008891]"

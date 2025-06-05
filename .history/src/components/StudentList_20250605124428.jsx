@@ -103,18 +103,12 @@ const StudentList = () => {
               >
                 View Resume
               </a> */}
-              {["shortlisted", "strong Match"].includes(student.status) ? (
-                <button
-                  onClick={() => handleSendMail(student.id, student.email)}
-                  className="mt-2 bg-[#00ADB5] text-white px-3 py-1 rounded hover:bg-[#008891]"
-                >
-                  Send Mail
-                </button>
-              ) : (
-                <p className="text-red-400 mt-2 text-sm">
-                  Not eligible for mailing
-                </p>
-              )}
+              <button
+                onClick={() => handleSendMail(student.id, student.email)}
+                className="mt-2 bg-[#00ADB5] text-white px-3 py-1 rounded hover:bg-[#008891]"
+              >
+                Send Mail
+              </button>
             </div>
           </div>
         ))}

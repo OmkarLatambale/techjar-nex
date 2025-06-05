@@ -4,7 +4,7 @@ import axios from "axios";
 
 const StudentList = () => {
   const location = useLocation();
-  const jobId = location.state?.jobId;
+  const jobId = location.state?.organizationName;
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -17,12 +17,12 @@ const StudentList = () => {
         );
         const data = response.data;
 
-        const filtered = jobId
-          ? data.filter((student) => student.job_id === String(jobId))
-          : data;
+        // Optional: filter by jobId if needed
+        // const filtered = jobId
+        //   ? data.filter((student) => student.job_id === String(jobId))
+        //   : data;
 
         const formatted = filtered.map((item) => ({
-          id: item.id,
           name: item.user_name,
           email: item.email,
           contact: item.phone_number,
@@ -43,16 +43,8 @@ const StudentList = () => {
     fetchStudents();
   }, [jobId]);
 
-  const handleSendMail = async (matchResultId, email) => {
-    try {
-      await axios.post(
-        `https://ibot-backend.onrender.com/jobs/send-email/?id=${matchResultId}`
-      );
-      alert(`Mail sent to ${email}`);
-    } catch (error) {
-      console.error("Failed to send email", error);
-      alert(`Failed to send email to ${email}`);
-    }
+  const handleSendMail = (email) => {
+    alert(`Mail sent to ${email}`);
   };
 
   const handleSendMailToAll = () => {
@@ -70,6 +62,7 @@ const StudentList = () => {
           <img src="/assets/botImage.png" alt="logo" className="w-10 h-10" />
           <span className="text-2xl font-bold">NEX.AI</span>
         </div>
+
         <div className="flex gap-4">
           <button
             onClick={handleSendMailToAll}
@@ -84,7 +77,7 @@ const StudentList = () => {
         {students.map((student, idx) => (
           <div
             key={idx}
-            className="bg-[#2c2f36] p-4 rounded shadow-md overflow-auto"
+            className="bg-[#2c2f36] p-4 rounded shadow-md overflow-auto flex-wrap"
           >
             <p className="font-bold text-lg">{student.name}</p>
             <p className="text-sm">Email: {student.email}</p>
@@ -92,30 +85,16 @@ const StudentList = () => {
             <p className="text-sm">
               Organization Name: {student.organization_name}
             </p>
-            <p className="text-sm">Match Score: {student.match_score}</p>
-            <p className="text-sm">Match Status: {student.status}</p>
-            <div className="flex gap-2 mt-3">
-              {/* <a
-                href={student.resume}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline text-sm"
-              >
-                View Resume
-              </a> */}
-              {["shortlisted", "strong Match"].includes(student.status) ? (
-                <button
-                  onClick={() => handleSendMail(student.id, student.email)}
-                  className="mt-2 bg-[#00ADB5] text-white px-3 py-1 rounded hover:bg-[#008891]"
-                >
-                  Send Mail
-                </button>
-              ) : (
-                <p className="text-red-400 mt-2 text-sm">
-                  Not eligible for mailing
-                </p>
-              )}
-            </div>
+            <p className="text-sm">
+              Match Score: {student.match_score || "N/A"}
+            </p>
+            <p className="text-sm">Match Status: {student.status || "N/A"}</p>
+            <button
+              onClick={() => handleSendMail(student.email)}
+              className="mt-2 bg-[#1e222a] text-[#DFD0B8] px-3 py-1 rounded hover:bg-black w-full"
+            >
+              Send Mail
+            </button>
           </div>
         ))}
       </div>
