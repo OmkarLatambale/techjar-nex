@@ -34,7 +34,7 @@ const StudentList = () => {
 
         setStudents(formatted);
         setLoading(false);
-      } catch (err) {
+      } catch  {
         setError("Failed to fetch students");
         setLoading(false);
       }

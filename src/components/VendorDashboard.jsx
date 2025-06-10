@@ -177,6 +177,15 @@ const VendorDashboard = () => {
             Jobs
           </motion.button>
 
+           <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="border px-3 py-1 rounded-md w-32 sm:w-40 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
+            onClick={() => navigate("/vendor-reports")}
+          >
+            Reports
+          </motion.button>
+
           {/* User Dropdown */}
           <div className="relative group">
             <motion.div

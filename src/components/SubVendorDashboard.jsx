@@ -38,7 +38,7 @@ function SubVendorDashboard() {
       <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
         <div className="flex items-center gap-2">
           <img
-            src="/src/assets/botImage.png"
+            src="/public/assets/botImage.png"
             alt="logo"
             className="w-10 h-10"
           />
