@@ -187,73 +187,18 @@ const Reports = () => {
               {selectedReport.average_rating.toFixed(1)}/10
             </p>
 
-            {/* <div className="mt-4">
-              <h3 className="font-semibold mb-2 text-[#DFD0B8]">
-                Full Interview Report:
-              </h3>
-
-              <pre className="bg-[#2c2f36] p-4 rounded text-sm whitespace-pre-wrap">
-                {selectedReport.report_text}
-              </pre>
-            </div> */}
-
             <div className="mt-4">
               <h3 className="font-semibold mb-2 text-[#DFD0B8]">
                 Full Interview Report:
               </h3>
-
-              {/* Render sanitized HTML report */}
               <div
                 className="bg-[#2c2f36] p-4 rounded text-sm prose prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: selectedReport.report_text }}
               ></div>
 
-              {/* View & Download PDF Buttons */}
-              {selectedReport.pdf_file && (
-                <div className="mt-4 flex gap-4">
-                  {/* View PDF Button */}
-                  <button
-                    onClick={() => {
-                      const src = `data:application/pdf;base64,${selectedReport.pdf_file}`;
-                      const win = window.open();
-                      win.document.write(`
-            <html>
-              <head><title>PDF Viewer</title></head>
-              <body style="margin:0">
-                <iframe width="100%" height="100%" src="${src}" frameborder="0"></iframe>
-              </body>
-            </html>
-          `);
-                    }}
-                    className="bg-[#DFD0B8] text-black text-sm font-semibold px-4 py-2 rounded hover:bg-[#c6b79f]"
-                  >
-                    View PDF
-                  </button>
-
-                  {/* Download PDF Button */}
-                  <button
-                    onClick={() => {
-                      const byteString = atob(selectedReport.pdf_file);
-                      const len = byteString.length;
-                      const bytes = new Uint8Array(len);
-                      for (let i = 0; i < len; i++)
-                        bytes[i] = byteString.charCodeAt(i);
-                      const blob = new Blob([bytes], {
-                        type: "application/pdf",
-                      });
-                      const link = document.createElement("a");
-                      link.href = URL.createObjectURL(blob);
-                      link.download = `${selectedReport.candidate_name}-InterviewReport.pdf`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }}
-                    className="bg-[#DFD0B8] text-black text-sm font-semibold px-4 py-2 rounded hover:bg-[#c6b79f]"
-                  >
-                    Download PDF
-                  </button>
-                </div>
-              )}
+              <pre className="bg-[#2c2f36] p-4 rounded text-sm whitespace-pre-wrap">
+                {selectedReport.report_text}
+              </pre>
             </div>
           </>
         ) : (
