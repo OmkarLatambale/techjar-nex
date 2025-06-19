@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useJobs } from "../hooks/useJobs";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const VendorJobInbox = () => {
   const { jobs, loading, error } = useJobs();
@@ -9,7 +9,7 @@ const VendorJobInbox = () => {
   const location = useLocation();
 
   const handleSendToSubvendor = (id) => {
-    navigate("/subvendor-list", { state: { jobId: id } });
+    alert(`Send to subvendor clicked for job ID: ${id}`);
   };
 
   const handleViewCandidates = (id) => {
@@ -19,19 +19,12 @@ const VendorJobInbox = () => {
     navigate("/upload", { state: { jobId: id, jobData: selectedJob } });
   };
 
-  useEffect(() => {
-    const returnedJobData = location.state?.jobData;
-    if (returnedJobData) {
-      setSelectedJob(returnedJobData);
-    }
-  }, [location.state]);
-
   return (
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 flex flex-col md:grid md:grid-cols-3 gap-4">
       {/* Sidebar */}
       <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md md:col-span-1 max-h-[40vh] md:max-h-[100vh] overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4 border-b border-[#393e46] pb-2">
-          Jobs
+          Job Listings
         </h2>
 
         {loading && <p className="text-gray-400">Loading...</p>}
@@ -57,7 +50,7 @@ const VendorJobInbox = () => {
       </div>
 
       {/* Job Details */}
-      <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md  max-h-[40vh] md:max-h-[100vh] overflow-y-auto w-[70%] md:w-full md:col-span-2">
+      <div className="md:col-span-2 bg-[#393e46] p-6 rounded-lg shadow-md flex-grow overflow-auto">
         {selectedJob ? (
           <>
             {/* {console.log(
@@ -83,14 +76,14 @@ const VendorJobInbox = () => {
               <h3 className="font-semibold mb-2 text-[#DFD0B8]">
                 Description:
               </h3>
-              <div className="space-y-2">
+              <ul className="list-disc pl-6 space-y-1">
                 {selectedJob.generated_jd
                   .split(/\.\s*|\n+/)
                   .filter((line) => line.trim() !== "")
                   .map((line, idx) => (
-                    <div key={idx}>{line.trim()}</div>
+                    <li key={idx}>{line.trim()}</li>
                   ))}
-              </div>
+              </ul>
             </div>
 
             <div className="mt-6 flex flex-col sm:flex-row gap-4">
@@ -98,13 +91,13 @@ const VendorJobInbox = () => {
                 onClick={() => handleViewCandidates(selectedJob.id)}
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
-                Candidate
+                Candidate List
               </button>
               <button
                 onClick={() => handleSendToSubvendor(selectedJob.id)}
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
-                Subvendor
+                Send to Subvendor
               </button>
               <button
                 onClick={() => handleUpload(selectedJob.id)}

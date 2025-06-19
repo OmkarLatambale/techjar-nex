@@ -96,7 +96,7 @@ function SubVendorList() {
     const fetchSubVendors = async () => {
       try {
         const response = await axios.get(
-          "https://ibot-backend.onrender.com/api/subvendors/"
+          "http://127.0.0.1:8000/api/subvendors/"
         );
         setSubVendors(response.data);
       } catch (err) {

@@ -57,7 +57,7 @@ const VendorJobInbox = () => {
       </div>
 
       {/* Job Details */}
-      <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md  max-h-[40vh] md:max-h-[100vh] overflow-y-auto w-[70%] md:w-full md:col-span-2">
+      <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md w-70% max-h-[40vh] md:max-h-[100vh] overflow-y-auto">
         {selectedJob ? (
           <>
             {/* {console.log(

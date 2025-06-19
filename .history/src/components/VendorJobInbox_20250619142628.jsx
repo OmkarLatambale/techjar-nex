@@ -57,7 +57,7 @@ const VendorJobInbox = () => {
       </div>
 
       {/* Job Details */}
-      <div className="bg-[#2c2f36] p-4 rounded-lg shadow-md  max-h-[40vh] md:max-h-[100vh] overflow-y-auto w-[70%] md:w-full md:col-span-2">
+      <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 flex flex-col md:grid md:grid-cols-3 gap-4">
         {selectedJob ? (
           <>
             {/* {console.log(
