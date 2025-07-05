@@ -213,7 +213,7 @@ function Contact() {
         </motion.p>
         <div className="w-1/2 h-px bg-[#948979]" />
         <motion.p className="text-[#948979] text-lg sm:text-2xl font-bold text-center">
-          +91 9876543210
+          +91 XXXXXXXXXX
         </motion.p>
       </motion.div>
     </div>

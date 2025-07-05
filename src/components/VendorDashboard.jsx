@@ -111,7 +111,6 @@ import { motion } from "framer-motion";
 const VendorDashboard = () => {
   const navigate = useNavigate();
 
-  // KPI state
   const [kpis, setKpis] = useState({
     active_job_listings: 0,
     total_job_openings: 0,
@@ -119,7 +118,12 @@ const VendorDashboard = () => {
     applications_processed: 0,
   });
 
-  // Load KPI data from backend on mount
+  const [showModal, setShowModal] = useState(false);
+  const [subvendor, setSubvendor] = useState({
+    name: "",
+    email: "",
+  });
+
   useEffect(() => {
     const loadKPIs = async () => {
       try {
@@ -132,7 +136,18 @@ const VendorDashboard = () => {
     loadKPIs();
   }, []);
 
-  // Animation variants
+  const handleInputChange = (e) => {
+    setSubvendor({ ...subvendor, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Subvendor submitted:", subvendor);
+    // Add your backend submission logic here
+    setShowModal(false);
+    setSubvendor({ name: "", email: "" });
+  };
+
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
@@ -146,7 +161,6 @@ const VendorDashboard = () => {
     <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 sm:p-8 overflow-x-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10 animate-fade-in gap-4 sm:gap-0">
-        {/* Left: Logo */}
         <div className="flex items-center gap-3">
           <motion.img
             initial={{ scale: 0 }}
@@ -166,24 +180,33 @@ const VendorDashboard = () => {
           </motion.span>
         </div>
 
-        {/* Right: Jobs + Vendor */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="border px-3 py-1 rounded-md w-32 sm:w-40 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
+            className="border px-3 py-1 rounded-md w-28 sm:w-36 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
             onClick={() => navigate("/vendor-jobs")}
           >
             Jobs
           </motion.button>
 
-           <motion.button
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="border px-3 py-1 rounded-md w-32 sm:w-40 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
+            className="border px-3 py-1 rounded-md w-28 sm:w-36 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
             onClick={() => navigate("/vendor-reports")}
           >
             Reports
+          </motion.button>
+
+          {/* New: Add Subvendor */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="border px-3 py-1 rounded-md w-28 sm:w-36 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
+            onClick={() => setShowModal(true)}
+          >
+            Add Subvendor
           </motion.button>
 
           {/* User Dropdown */}
@@ -197,14 +220,9 @@ const VendorDashboard = () => {
               <UserRound className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.div>
 
-            {/* Dropdown */}
             <div className="absolute right-0 mt-2 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible">
-              {" "}
               <div
-                onClick={() => {
-                  // Replace with your actual logout logic
-                  navigate("/login");
-                }}
+                onClick={() => navigate("/login")}
                 className="text-center text-sm px-3 py-1 hover:bg-[#3c4049] cursor-pointer w-full"
               >
                 Logout
@@ -253,6 +271,50 @@ const VendorDashboard = () => {
           />
         </motion.div>
       </div>
+
+      {/* Subvendor Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-[#2c2f36] border border-[#DFD0B8] rounded-lg p-6 w-96 relative">
+            <h2 className="text-lg font-bold mb-4 text-center">Add Subvendor</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <input
+                type="text"
+                name="name"
+                value={subvendor.name}
+                onChange={handleInputChange}
+                placeholder="Subvendor Name"
+                required
+                className="p-2 rounded bg-[#1e222a] text-[#DFD0B8] border border-[#DFD0B8]"
+              />
+              <input
+                type="email"
+                name="email"
+                value={subvendor.email}
+                onChange={handleInputChange}
+                placeholder="Subvendor Email"
+                required
+                className="p-2 rounded bg-[#1e222a] text-[#DFD0B8] border border-[#DFD0B8]"
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 rounded bg-gray-600 text-white hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded bg-[#DFD0B8] text-[#1e222a] hover:bg-[#c0ae92]"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

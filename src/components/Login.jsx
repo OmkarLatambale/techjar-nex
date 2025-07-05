@@ -85,9 +85,11 @@
 
 // export default Login;
 
+/// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 
 function Login() {
   const [role, setRole] = useState("vendor");
@@ -97,15 +99,18 @@ function Login() {
 
   const { login, error, loading } = useLogin();
 
-  const handleLogin = () => {
-    login({ email, password, role });
+  const handleLogin = async () => {
+    try {
+      await login({ email, password, role });
+      toast.success("Login successful!");
+    } catch (error) {
+      toast.error(error.message || "Login failed. Please try again.");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#1e222a] px-4 sm:px-6 lg:px-8 text-white">
-      <div
-        className="w-full max-w-sm sm:max-w-md bg-[#1e222a] border border-[#948979] p-6 sm:p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-500 space-y-6"
-      >
+    <div className="min-h-screen flex items-center justify-center bg-[#222831] px-4 sm:px-6 lg:px-8 text-white">
+      <div className="w-full max-w-sm sm:max-w-md bg-[#1e222a] border border-[#948979] p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500 space-y-6">
         {/* Logo */}
         <div className="flex justify-center">
           <img
@@ -115,7 +120,6 @@ function Login() {
           />
         </div>
 
-        {/* Title */}
         <h2 className="text-center text-lg sm:text-xl font-semibold text-[#DFD0B8]">
           Login as {role === "vendor" ? "Vendor" : "Sub-Vendor"}
         </h2>
@@ -144,7 +148,7 @@ function Login() {
           </button>
         </div>
 
-        {/* Input Fields */}
+        {/* Inputs */}
         <div className="space-y-4">
           <input
             type="email"
@@ -172,9 +176,11 @@ function Login() {
           </div>
         </div>
 
-        {/* Error Message */}
+        {/* Optional inline error */}
         {error && (
-          <div className="text-red-400 text-xs text-center -mt-2">{error}</div>
+          <div className="text-red-400 text-xs text-center -mt-2">
+            {error}
+          </div>
         )}
 
         {/* Login Button */}

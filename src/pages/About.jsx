@@ -126,10 +126,10 @@ function About() {
         {/* Image Section */}
         <motion.div
           className="md:w-1/2 flex justify-center items-center"
-          initial={{ opacity: 0, x: 80 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        transition={{ ease: "easeOut", duration: 2.5, stiffness: 20 }}
+        //   initial={{ opacity: 0, x: 80 }}
+        //   whileInView={{ opacity: 1, x: 0 }}
+        //   viewport={{ once: true }}
+        // transition={{ ease: "easeOut", duration: 2.5, stiffness: 20 }}
         >
           <img
             src="/assets/3.png"

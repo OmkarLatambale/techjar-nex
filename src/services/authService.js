@@ -15,12 +15,12 @@ export async function loginUser({ email, password, role }) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.message || "Login failed");
+      // ✅ Fix: read from .error, not .message
+      throw new Error(data.error || data.message || "Login failed");
     }
 
     return data;
   } catch (error) {
-    // Just rethrow the error to handle it upstream
-    throw error;
+    throw error; // upstream will use this for toast
   }
 }

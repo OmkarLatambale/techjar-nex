@@ -13,10 +13,14 @@ import SubVendorDashboard from "./components/SubVendorDashboard";
 import SubVendorList from "./components/SubVendorList";
 import FileUpload from "./components/FileUpload";
 import Reports from "./components/Reports";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   return (
     <BrowserRouter>
+     <ToastContainer position="top-center" autoClose={2000}  />
       <Routes>
         <Route path="/" element={<Layout />} />
         <Route path="/home" element={<Home />} />
