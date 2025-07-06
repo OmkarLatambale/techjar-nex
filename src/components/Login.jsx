@@ -85,33 +85,37 @@
 
 // export default Login;
 
-/// src/pages/Login.jsx
+// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
+import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
 
 function Login() {
+  const navigate = useNavigate();
   const [role, setRole] = useState("vendor");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login, error, loading } = useLogin();
+
+  const { login, loading } = useLogin();
 
   const handleLogin = async () => {
-    try {
-      await login({ email, password, role });
+    const res = await login({ email, password, role });
+
+    if (res.status === 200) {
       toast.success("Login successful!");
-    } catch (error) {
-      toast.error(error.message || "Login failed. Please try again.");
+      navigate(role === "vendor" ? "/vendor-dashboard" : "/subvendor-dashboard");
+    } else {
+      toast.error(res.data.message || "Login failed");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#222831] px-4 sm:px-6 lg:px-8 text-white">
       <div className="w-full max-w-sm sm:max-w-md bg-[#1e222a] border border-[#948979] p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500 space-y-6">
-        {/* Logo */}
         <div className="flex justify-center">
           <img
             src="/assets/botImage.png"
@@ -124,7 +128,6 @@ function Login() {
           Login as {role === "vendor" ? "Vendor" : "Sub-Vendor"}
         </h2>
 
-        {/* Role Switch */}
         <div className="flex items-center justify-center bg-[#393E46] rounded-full p-1 border border-[#948979] text-sm sm:text-base">
           <button
             onClick={() => setRole("vendor")}
@@ -148,7 +151,6 @@ function Login() {
           </button>
         </div>
 
-        {/* Inputs */}
         <div className="space-y-4">
           <input
             type="email"
@@ -176,14 +178,6 @@ function Login() {
           </div>
         </div>
 
-        {/* Optional inline error */}
-        {error && (
-          <div className="text-red-400 text-xs text-center -mt-2">
-            {error}
-          </div>
-        )}
-
-        {/* Login Button */}
         <button
           onClick={handleLogin}
           disabled={loading}
