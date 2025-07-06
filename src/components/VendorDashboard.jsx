@@ -107,9 +107,11 @@ import { UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
 
 const VendorDashboard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const [kpis, setKpis] = useState({
     active_job_listings: 0,
@@ -143,9 +145,13 @@ const VendorDashboard = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Subvendor submitted:", subvendor);
-    // Add your backend submission logic here
     setShowModal(false);
     setSubvendor({ name: "", email: "" });
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
   };
 
   const cardVariants = {
@@ -199,7 +205,6 @@ const VendorDashboard = () => {
             Reports
           </motion.button>
 
-          {/* New: Add Subvendor */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -209,7 +214,6 @@ const VendorDashboard = () => {
             Add Subvendor
           </motion.button>
 
-          {/* User Dropdown */}
           <div className="relative group">
             <motion.div
               initial={{ x: 50, opacity: 0 }}
@@ -222,7 +226,7 @@ const VendorDashboard = () => {
 
             <div className="absolute right-0 mt-2 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 invisible">
               <div
-                onClick={() => navigate("/login")}
+                onClick={handleLogout}
                 className="text-center text-sm px-3 py-1 hover:bg-[#3c4049] cursor-pointer w-full"
               >
                 Logout

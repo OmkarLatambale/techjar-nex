@@ -1,39 +1,44 @@
 // src/hooks/useLogin.js
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
-export function useLogin() {
-  const [error, setError] = useState("");
+export const useLogin = () => {
+  const { login: setAuth } = useAuth();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const login = async ({ email, password, role }) => {
+  const loginHandler = async ({ email, password, role }) => {
     setLoading(true);
-    setError("");
 
     try {
-      const data = await loginUser({ email, password, role });
+      const response = await loginUser({ email, password, role });
+      const { access, refresh, email: userEmail, username, role: userRole } = response;
 
-      if (role === "vendor") {
-        navigate("/vendor-dashboard");
-      } else {
-        navigate("/subvendor-dashboard");
+      if (!access) {
+        return { status: 401, data: { message: "Invalid credentials" } };
       }
 
-      return data;
-    } catch (err) {
-      // ✅ extract backend error message from response
-      const message =
-        err?.response?.data?.error || err?.message || "Login failed";
-      setError(message);
+      setAuth({
+        token: access,
+        refreshToken: refresh,
+        user: {
+          email: userEmail,
+          username,
+          role: userRole,
+        },
+      });
 
-      // 🚨 Throw plain string instead of Error object
-      throw message;
+      return { status: 200, data: response };
+    } catch (error) {
+      const status = error?.response?.status || 500;
+      const message = error?.response?.data?.error || "Login failed";
+      return { status, data: { message } };
     } finally {
       setLoading(false);
     }
   };
 
-  return { login, error, loading };
-}
+  return { login: loginHandler, loading };
+};
+
+export default useLogin;
