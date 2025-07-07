@@ -73,6 +73,7 @@
 
 // export default FileUpload;
 
+// src/pages/FileUpload.jsx
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useFileUpload from "../hooks/useFileUpload";
@@ -99,7 +100,6 @@ function FileUpload() {
     const success = await handleUpload(selectedFiles, jobId);
 
     if (success) {
-      // ✅ Navigate back with selected job re-focused
       navigate("/vendor-jobs", { state: { jobId: jobId, jobData } });
     }
   };

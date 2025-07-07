@@ -9,17 +9,21 @@ const StudentList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(
-          "https://ibot-backend.onrender.com/jobs/match-results/"
-        );
-        const data = response.data;
+        const response = await axios.get(`${API_URL}/jobs/match-results/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const filtered = jobId
-          ? data.filter((student) => student.job_id === String(jobId))
-          : data;
+          ? response.data.filter((student) => student.job_id === String(jobId))
+          : response.data;
 
         const formatted = filtered.map((item) => ({
           id: item.id,
@@ -33,20 +37,28 @@ const StudentList = () => {
         }));
 
         setStudents(formatted);
-        setLoading(false);
-      } catch  {
+        setError("");
+      } catch (err) {
+        console.error("Failed to fetch students", err);
         setError("Failed to fetch students");
+      } finally {
         setLoading(false);
       }
     };
 
     fetchStudents();
-  }, [jobId]);
+  }, [jobId, API_URL, token]);
 
   const handleSendMail = async (matchResultId, email) => {
     try {
       await axios.post(
-        `https://ibot-backend.onrender.com/jobs/send-email/?id=${matchResultId}`
+        `${API_URL}/jobs/send-email/?id=${matchResultId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       alert(`Mail sent to ${email}`);
     } catch (error) {
@@ -95,14 +107,6 @@ const StudentList = () => {
             <p className="text-sm">Match Score: {student.match_score}</p>
             <p className="text-sm">Match Status: {student.status}</p>
             <div className="flex gap-2 mt-3">
-              {/* <a
-                href={student.resume}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline text-sm"
-              >
-                View Resume
-              </a> */}
               {["shortlisted", "strong Match"].includes(student.status) ? (
                 <button
                   onClick={() => handleSendMail(student.id, student.email)}

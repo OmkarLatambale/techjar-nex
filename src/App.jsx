@@ -125,7 +125,7 @@ function App() {
         <Route path="/jobpost" element={<Jobpost />} />
 
         {/* Protected Routes */}
-        {/* <Route element={<PrivateRoute />}> */}
+        <Route element={<PrivateRoute />}>
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
           <Route path="/vendor-jobs" element={<VendorJobInbox />} />
           <Route path="/vendor-reports" element={<Reports />} />
@@ -133,7 +133,7 @@ function App() {
           <Route path="/subvendor-dashboard" element={<SubVendorDashboard />} />
           <Route path="/subvendor-list" element={<SubVendorList />} />
           <Route path="/upload" element={<FileUpload />} />
-        {/* </Route> */}
+        </Route>
       </Routes>
     </>
   );

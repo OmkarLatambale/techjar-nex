@@ -69,13 +69,13 @@ const Home = () => {
             <br />
             Streamlined.
           </h1>
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="mt-4 px-6 py-3 border border-[#948979] text-[#DFD0B8] rounded-md hover:bg-[#948979] hover:text-[#393e46] transition"
           >
             Get Started
-          </motion.button>
+          </motion.button> */}
         </motion.div>
 
         {/* Image Section */}

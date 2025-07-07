@@ -7,13 +7,22 @@ export async function loginUser({ email, password, role }) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ username: email, password, role }),
+    body: JSON.stringify({
+      username: email, // Backend uses 'username' field for email
+      password,
+      role, // Ensure role = 'vendor' or 'subvendor'
+    }),
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw { response: { status: response.status, data } };
+    throw {
+      response: {
+        status: response.status,
+        data,
+      },
+    };
   }
 
   return data;
