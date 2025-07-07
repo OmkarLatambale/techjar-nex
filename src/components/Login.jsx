@@ -99,11 +99,17 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-
   const { login, loading } = useLogin();
 
   const handleLogin = async () => {
-    const res = await login({ email, password, role });
+    if (!email || !password) {
+      toast.error("Email and password are required.");
+      return;
+    }
+
+    const roleFormatted = role === "sub-vendor" ? "subvendor" : role;
+
+    const res = await login({ email, password, role: roleFormatted });
 
     if (res.status === 200) {
       toast.success("Login successful!");
@@ -132,9 +138,7 @@ function Login() {
           <button
             onClick={() => setRole("vendor")}
             className={`w-1/2 px-3 py-1.5 rounded-full font-medium transition-all duration-300 ${
-              role === "vendor"
-                ? "bg-[#222831] text-[#DFD0B8]"
-                : "text-[#948979]"
+              role === "vendor" ? "bg-[#222831] text-[#DFD0B8]" : "text-[#948979]"
             }`}
           >
             Vendor
@@ -142,9 +146,7 @@ function Login() {
           <button
             onClick={() => setRole("sub-vendor")}
             className={`w-1/2 px-3 py-1.5 rounded-full font-medium transition-all duration-300 ${
-              role === "sub-vendor"
-                ? "bg-[#222831] text-[#DFD0B8]"
-                : "text-[#948979]"
+              role === "sub-vendor" ? "bg-[#222831] text-[#DFD0B8]" : "text-[#948979]"
             }`}
           >
             Sub-Vendor

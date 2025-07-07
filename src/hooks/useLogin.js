@@ -12,12 +12,14 @@ export const useLogin = () => {
 
     try {
       const response = await loginUser({ email, password, role });
+
       const { access, refresh, email: userEmail, username, role: userRole } = response;
 
       if (!access) {
         return { status: 401, data: { message: "Invalid credentials" } };
       }
 
+      // Save in context
       setAuth({
         token: access,
         refreshToken: refresh,
@@ -31,7 +33,11 @@ export const useLogin = () => {
       return { status: 200, data: response };
     } catch (error) {
       const status = error?.response?.status || 500;
-      const message = error?.response?.data?.error || "Login failed";
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data?.detail ||
+        "Login failed";
+
       return { status, data: { message } };
     } finally {
       setLoading(false);

@@ -112,6 +112,8 @@ import { useAuth } from "../context/AuthContext";
 const VendorDashboard = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { auth } = useAuth(); // Get the current auth object
+  const token = auth?.token;
 
   const [kpis, setKpis] = useState({
     active_job_listings: 0,
@@ -129,14 +131,15 @@ const VendorDashboard = () => {
   useEffect(() => {
     const loadKPIs = async () => {
       try {
-        const data = await fetchKPIs();
+        if (!token) return; // Optional: guard in case token is missing
+        const data = await fetchKPIs(token); // Pass token here
         setKpis(data);
       } catch (error) {
         console.error("Failed to fetch KPIs:", error);
       }
     };
     loadKPIs();
-  }, []);
+  }, [token]); // ✅ dependency on token in case it loads later
 
   const handleInputChange = (e) => {
     setSubvendor({ ...subvendor, [e.target.name]: e.target.value });

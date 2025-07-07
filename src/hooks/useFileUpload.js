@@ -30,6 +30,7 @@
 
 // hooks/useFileUpload.js
 
+// src/hooks/useFileUpload.js
 import { useState } from "react";
 import { uploadResumes } from "../services/uploadService";
 
@@ -44,11 +45,11 @@ const useFileUpload = () => {
     try {
       await uploadResumes(files, jobId);
       setStatus("Files uploaded successfully!");
-      return true; // ✅ Indicate success
+      return true;
     } catch (error) {
       console.error("Upload error:", error);
       setStatus(`Upload failed: ${error.message}`);
-      return false; // ✅ Indicate failure
+      return false;
     } finally {
       setLoading(false);
     }

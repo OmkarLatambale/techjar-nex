@@ -1,8 +1,10 @@
-// hooks/useKpis.js
 import { useState, useEffect } from "react";
 import { fetchKPIs } from "../services/kpiService";
+import { useAuth } from "../context/AuthContext"; // ✅ import
 
 const useKpis = () => {
+  const { token } = useAuth(); // ✅ get token from AuthContext
+
   const [kpis, setKpis] = useState({
     activeListings: 0,
     totalJobsPosted: 0,
@@ -15,7 +17,8 @@ const useKpis = () => {
   useEffect(() => {
     const loadKPIs = async () => {
       try {
-        const data = await fetchKPIs();
+        if (!token) return; // ⛔ don't call if token is missing
+        const data = await fetchKPIs(token); // ✅ pass token
         setKpis(data);
         setError(null);
       } catch (err) {
@@ -26,7 +29,7 @@ const useKpis = () => {
     };
 
     loadKPIs();
-  }, []);
+  }, [token]); // ✅ watch for token availability
 
   return { kpis, loading, error };
 };

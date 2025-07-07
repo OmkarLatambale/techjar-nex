@@ -1,15 +1,20 @@
+// src/services/uploadService.js
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const uploadResumes = async (files, jobId) => {
   const formData = new FormData();
 
-  // Append each file under the "resumes" key
   files.forEach((file) => formData.append("resumes", file));
+  formData.append("jobId", jobId);
 
-  // Append the jobId (make sure backend expects the same key name)
-  formData.append("jobId", jobId); // 👈 Changed to "jobId" assuming it's standard
+  const token = localStorage.getItem("authToken");
 
-  const response = await fetch("https://ibot-backend.onrender.com/jobs/jdresponse/ ", {
+  const response = await fetch(`${API_URL}/jobs/jdresponse/`, {
     method: "POST",
     body: formData,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   if (!response.ok) {
