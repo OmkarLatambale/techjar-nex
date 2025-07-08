@@ -16,9 +16,5 @@ export const getJobsForVendor = async (token) => {
   return response.data;
 };
 
-export const assignToSubVendor = async (jobId, subVendorId) => {
-  const response = await axios.post(`${API_URL}/jobs/${jobId}/assign`, {
-    subVendorId,
-  });
-  return response.data;
-};
+// ✅ Add this line
+export const getAllJobs = getJobsForVendor;

@@ -1,9 +1,7 @@
 // src/services/uploadService.js
 const API_URL = import.meta.env.VITE_API_URL;
-
 export const uploadResumes = async (files, jd_id) => {
   const formData = new FormData();
-
   files.forEach((file) => formData.append("resumes", file));
   formData.append("jobId", jd_id);
 

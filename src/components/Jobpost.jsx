@@ -264,7 +264,7 @@
 
 // export default Jobpost;
 
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SuccessAnimation from "./SuccessAnimation";
 import { useJobDescription } from "../hooks/useJobDescription";
@@ -282,11 +282,16 @@ const Jobpost = () => {
   const [requirements, setRequirements] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
-
-  const { generatedDesc, loading, error, generateJD } = useJobDescription();
   const [editableDesc, setEditableDesc] = useState("");
 
-  // Apply bullets only once, after generation
+  const {
+    generatedDesc,
+    loading,
+    error,
+    generateJD,
+    resetJD, // ✅ clears internal state in hook
+  } = useJobDescription();
+
   useEffect(() => {
     if (generatedDesc) {
       setEditableDesc(formatAsBullets(generatedDesc));
@@ -321,7 +326,7 @@ const Jobpost = () => {
       await postJob(newJob);
       setShowSuccess(true);
 
-      // Reset form
+      // ✅ Reset form fields
       setorganization_name("");
       setEmail("");
       setjob_industry("");
@@ -331,7 +336,11 @@ const Jobpost = () => {
       setCtc("");
       seteligibility_criteria("");
       setRequirements("");
+
+      // ✅ Clear JD area and hook
+      setEditableDesc("");
       setHasGenerated(false);
+      resetJD(); // clear the hook's generatedDesc
     } catch (error) {
       console.error("Error posting job:", error);
       alert("Failed to post job. Please try again.");
@@ -345,7 +354,6 @@ const Jobpost = () => {
     }
   }, [showSuccess]);
 
-  // ✅ Updated to prevent bullet stacking
   const formatAsBullets = (text) => {
     return text
       .split(/\r?\n|(?<=[.?!])\s+/)
@@ -365,21 +373,9 @@ const Jobpost = () => {
           <span className="text-2xl font-bold text-[#DFD0B8]">NEX.AI</span>
         </div>
         <ul className="flex flex-wrap justify-center gap-6 text-sm font-medium">
-          <li>
-            <Link to="/" className="hover:text-[#948979]">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link to="/about" className="hover:text-[#948979]">
-              About us
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact" className="hover:text-[#948979]">
-              Contact us
-            </Link>
-          </li>
+          <li><Link to="/" className="hover:text-[#948979]">Home</Link></li>
+          <li><Link to="/about" className="hover:text-[#948979]">About us</Link></li>
+          <li><Link to="/contact" className="hover:text-[#948979]">Contact us</Link></li>
         </ul>
       </nav>
 
@@ -421,72 +417,15 @@ const Jobpost = () => {
           className="w-full lg:w-1/2 space-y-4"
           onSubmit={(e) => e.preventDefault()}
         >
-          <input
-            value={organization_name}
-            onChange={(e) => setorganization_name(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Organization Name"
-            required
-          />
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Email Address"
-            required
-          />
-          <input
-            value={job_industry}
-            onChange={(e) => setjob_industry(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Industry"
-            required
-          />
-          <input
-            value={job_title}
-            onChange={(e) => setjob_title(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Job Title"
-            required
-          />
-          <input
-            value={skills}
-            onChange={(e) => setskills(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Skills (comma-separated)"
-            required
-          />
-          <input
-            value={job_location}
-            onChange={(e) => setjob_location(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Job Location"
-            required
-          />
-          <input
-            value={ctc}
-            onChange={(e) => setCtc(e.target.value)}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="CTC Offered"
-            required
-          />
-          <textarea
-            value={eligibility_criteria}
-            onChange={(e) => seteligibility_criteria(e.target.value)}
-            rows={3}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Eligibility Criteria"
-            required
-          />
-          <textarea
-            value={requirements}
-            onChange={(e) => setRequirements(e.target.value)}
-            rows={3}
-            className="w-full px-4 py-2 bg-[#2b2f38] rounded-md"
-            placeholder="Requirements"
-            required
-          />
+          <input value={organization_name} onChange={(e) => setorganization_name(e.target.value)} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Organization Name" required />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Email Address" required />
+          <input value={job_industry} onChange={(e) => setjob_industry(e.target.value)} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Industry" required />
+          <input value={job_title} onChange={(e) => setjob_title(e.target.value)} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Job Title" required />
+          <input value={skills} onChange={(e) => setskills(e.target.value)} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Skills (comma-separated)" required />
+          <input value={job_location} onChange={(e) => setjob_location(e.target.value)} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Job Location" required />
+          <input value={ctc} onChange={(e) => setCtc(e.target.value)} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="CTC Offered" required />
+          <textarea value={eligibility_criteria} onChange={(e) => seteligibility_criteria(e.target.value)} rows={3} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Eligibility Criteria" required />
+          <textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} rows={3} className="w-full px-4 py-2 bg-[#2b2f38] rounded-md" placeholder="Requirements" required />
 
           <button
             type="button"

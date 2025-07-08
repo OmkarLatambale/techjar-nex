@@ -76,88 +76,105 @@
 // export default SubVendorList;
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import { getSubvendors } from "../services/subvendorService";
+import { getAllJobs } from "../services/jobService"; // Ensure this exists
+import { assignJobToSubvendor } from "../services/assignmentService";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function SubVendorList() {
   const [subVendors, setSubVendors] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  const handleAssignJob = (email) => {
-    alert(`Job assigned to ${email}`);
-  };
-
-  const handleAssignToAll = () => {
-    const allEmails = subVendors.map((vendor) => vendor.email).join(", ");
-    alert(`Job assigned to all: ${allEmails}`);
-  };
+  const { auth } = useAuth();
+  const token = auth?.token;
 
   useEffect(() => {
-    const fetchSubVendors = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/subvendors/`);
-        setSubVendors(response.data);
-      } catch (err) {
-        console.error("Error fetching subvendors:", err);
-        setError("Failed to load sub vendors.");
+        const [subs, jobList] = await Promise.all([
+          getSubvendors(token),
+          getAllJobs(token),
+        ]);
+        setSubVendors(subs);
+        setJobs(jobList);
+      } catch  {
+        setError("Failed to load data.");
       } finally {
         setLoading(false);
       }
     };
+    fetchData();
+  }, [token]);
 
-    fetchSubVendors();
-  }, []);
+  const handleAssignJob = async (subvendorId) => {
+    if (!jobs.length) return toast.error("No jobs to assign.");
+    const job = jobs[0]; // Replace with selected if needed
+    try {
+      await assignJobToSubvendor(subvendorId, job.id, token);
+      const localKey = `subVendorJobs_${subvendorId}`;
+      const existing = JSON.parse(localStorage.getItem(localKey)) || [];
+      localStorage.setItem(localKey, JSON.stringify([...existing, job]));
+      toast.success(`Assigned job "${job.title}" to subvendor.`);
+    } catch  {
+      toast.error("Failed to assign job.");
+    }
+  };
+
+  const handleAssignToAll = async () => {
+    if (!jobs.length) return toast.error("No jobs to assign.");
+    const job = jobs[0];
+    try {
+      await Promise.all(
+        subVendors.map((vendor) =>
+          assignJobToSubvendor(vendor.id, job.id, token)
+        )
+      );
+      subVendors.forEach((vendor) => {
+        const key = `subVendorJobs_${vendor.id}`;
+        const prev = JSON.parse(localStorage.getItem(key)) || [];
+        localStorage.setItem(key, JSON.stringify([...prev, job]));
+      });
+      toast.success("Job assigned to all subvendors.");
+    } catch  {
+      toast.error("Assignment to all failed.");
+    }
+  };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-10 bg-[#222831] min-h-screen text-[#DFD0B8]">
-      <div className="flex items-center gap-3 mb-10">
-        <img src="/assets/botImage.png" alt="logo" className="w-10 h-10 sm:w-12 sm:h-12" />
-        <span className="text-2xl sm:text-3xl font-bold">NEX.AI</span>
-      </div>
-
-      <h1 className="text-xl sm:text-2xl font-semibold mb-4">Sub Vendors</h1>
+    <div className="p-6 bg-[#222831] min-h-screen text-[#DFD0B8]">
+      <h1 className="text-2xl font-bold mb-6">Sub Vendors</h1>
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
-      {!loading && !error && (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {subVendors.map((vendor, index) => (
-              <div
-                key={index}
-                className="bg-[#393e46] shadow-md rounded-lg p-5 border border-[#948979] hover:shadow-lg hover:scale-[1.02] transition duration-300"
-              >
-                <p className="text-sm sm:text-base">
-                  <strong>Email:</strong> {vendor.email}
-                </p>
-                <p className="text-sm sm:text-base mt-1">
-                  <strong>Role:</strong> {vendor.role}
-                </p>
-                <div className="mt-3">
-                  <button
-                    onClick={() => handleAssignJob(vendor.email)}
-                    className="w-full sm:w-auto bg-[#222831] text-white px-4 py-2 rounded hover:bg-[#948979] hover:text-[#222831] transition"
-                  >
-                    Assign Job
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {subVendors.map((vendor) => (
+          <div
+            key={vendor.id}
+            className="bg-[#393e46] p-4 rounded-lg border border-[#948979]"
+          >
+            <p><strong>Email:</strong> {vendor.email}</p>
+            <p><strong>Role:</strong> {vendor.role}</p>
             <button
-              onClick={handleAssignToAll}
-              className="border border-[#948979] text-white px-6 py-2 rounded-xl hover:bg-[#948979] hover:text-[#222831] transition"
+              onClick={() => handleAssignJob(vendor.id)}
+              className="mt-3 bg-[#948979] text-[#222831] px-4 py-2 rounded hover:opacity-90"
             >
-              Assign Job To All
+              Assign Job
             </button>
           </div>
-        </>
-      )}
+        ))}
+      </div>
+
+      <div className="mt-10 text-center">
+        <button
+          onClick={handleAssignToAll}
+          className="border border-[#948979] px-6 py-2 rounded text-white hover:bg-[#948979] hover:text-[#222831]"
+        >
+          Assign Job To All
+        </button>
+      </div>
     </div>
   );
 }
