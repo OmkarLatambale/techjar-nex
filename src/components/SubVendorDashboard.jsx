@@ -1,138 +1,155 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function SubVendorDashboard() {
+const SubVendorDashboard = () => {
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const { auth } = useAuth();
+  const navigate = useNavigate();
+  const token = auth?.token;
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    const storedJobs = JSON.parse(localStorage.getItem("subVendorJobs")) || [];
-    setJobs(storedJobs);
-    if (storedJobs.length > 0) {
-      setSelectedJob(storedJobs[0]);
-    }
-  }, []);
+  if (!token || hasFetched.current) return;
 
-  // ✅ Remove job when marked completed
-  const handleComplete = () => {
-    const updatedJobs = jobs.filter((job) => job.id !== selectedJob.id);
-    setJobs(updatedJobs);
-    localStorage.setItem("subVendorJobs", JSON.stringify(updatedJobs));
-    setSelectedJob(updatedJobs[0] || null);
-    alert("Job marked as completed and removed.");
+  const fetchAssignedJobs = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/jobs/subvendor/jds/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const extractedJobs = response.data.map((item) => {
+        const { id, job_title, posted_at, generated_jd } = item.jd_details;
+
+        // Do NOT include organization_name, email, etc.
+        return {
+          id,
+          job_title,
+          posted_at,
+          generated_jd,
+          assignment_id: item.id,
+        };
+      });
+
+      setJobs(extractedJobs);
+      setSelectedJob(extractedJobs[0] || null);
+    } catch (error) {
+      console.error("Error fetching subvendor jobs", error);
+    }
   };
 
-  // ✅ Upload resume file
-  const handleResumeUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      console.log(`Resume uploaded for job ID ${selectedJob.id}:`, file.name);
-      alert(
-        `Resume "${file.name}" uploaded successfully for job ID ${selectedJob.id}.`
+  hasFetched.current = true;
+  fetchAssignedJobs();
+}, [token]);
+
+  const handleResumeUpload = async (e) => {
+    const files = e.target.files;
+    if (!files.length || !selectedJob) return;
+
+    const formData = new FormData();
+    formData.append("jobId", selectedJob.id); // Use jobId not job_id
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append("resumes", files[i]); // Don't use resumes[]
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/jobs/subvendor/upload-resumes/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
       );
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || "Upload failed");
+      }
+
+      alert("Upload successful");
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Upload failed: " + err.message);
+    }
+  };
+
+  const handleViewCandidates = () => {
+    if (selectedJob?.id) {
+      navigate("/sub-students", { state: { jobId: selectedJob.id } });
     }
   };
 
   return (
-    <div className="flex h-screen font-sans">
-      {/* Left Panel */}
-      <div className="w-1/4 bg-[#393e46] text-white p-5 space-y-3 overflow-y-auto">
-        <div className="flex items-center gap-2">
-          <img
-            src="/public/assets/botImage.png"
-            alt="logo"
-            className="w-10 h-10"
-          />
-          <span className="text-2xl font-bold text-[#DFD0B8]">NEX.AI</span>
-        </div>
-        <h2 className="text-xl font-bold mb-4">Received Jobs</h2>
+    <div className="flex h-screen bg-[#222831] text-white">
+      {/* Sidebar: Jobs */}
+      <aside className="w-1/4 bg-[#393e46] p-5 overflow-y-auto">
+        <h2 className="text-lg font-semibold mb-4">Assigned Jobs</h2>
         {jobs.length === 0 ? (
-          <p className="text-sm text-gray-300">No jobs received yet.</p>
+          <p>No jobs assigned yet.</p>
         ) : (
-          jobs.map((job) => (
+          jobs.map((job, index) => (
             <button
-              key={job.id}
+              key={index}
               onClick={() => setSelectedJob(job)}
-              className={`w-full text-left p-3 rounded-lg transition ${
+              className={`block w-full text-left p-2 rounded mb-2 ${
                 selectedJob?.id === job.id
-                  ? "bg-[#dfd0b8] text-[#222831]"
-                  : "bg-gray-800 hover:bg-gray-700"
+                  ? "bg-[#dfd0b8] text-black"
+                  : "bg-gray-700"
               }`}
             >
-              {job.title}
+              Job {index + 1}
             </button>
           ))
         )}
-      </div>
+      </aside>
 
-      {/* Right Panel */}
-      <div className="bg-[#393e46] flex-1 p-5 px-15 justify-center items-center">
+      {/* Main Content: Job Details */}
+      <main className="flex-1 p-8 overflow-y-auto">
         {selectedJob ? (
-          <div className="w-full bg-[#dfd0b8] mt-10 overflow-y-auto p-10 px-15 align-center rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold text-[#222831] mb-2">
-              {selectedJob.title}
-            </h2>
-            <div className="text-sm text-[#222831] mb-4">
-              📅 Posted on: {selectedJob.datePosted}
-            </div>
+          <div className="bg-[#dfd0b8] text-black p-6 rounded shadow-md">
+            <h2 className="text-xl font-bold">{selectedJob.job_title}</h2>
+            <p className="mt-2">
+              📅 Posted At: {new Date(selectedJob.posted_at).toLocaleString()}
+            </p>
+            <p className="mt-2">📄 Description: {selectedJob.generated_jd}</p>
 
-            <div className="mb-3">
-              <strong>💰 CTC:</strong> {selectedJob.ctc}
-            </div>
-
-            <div className="mb-3">
-              <strong>📍 Location:</strong> {selectedJob.location}
-            </div>
-
-            <div className="mb-3">
-              <strong>📝 Overview:</strong>
-              <p className="ml-2 text-[#222831]">{selectedJob.overview}</p>
-            </div>
-
-            <div className="mb-3">
-              <strong>📄 Description:</strong>
-              <p className="ml-2 text-[#222831]">{selectedJob.description}</p>
-            </div>
-
-            <div className="mb-3">
-              <strong>✅ Criteria:</strong>
-              <p className="ml-2 text-[#222831]">{selectedJob.criteria}</p>
-            </div>
-
-            <div className="mb-6">
-              <strong>🎓 Eligible Courses:</strong>
-              <p className="ml-2 text-[#222831]">
-                {selectedJob.eligibleCourses}
-              </p>
-            </div>
-
-            {/* ✅ Action Buttons */}
-            <div className="flex gap-4 mt-6">
-              <button
-                onClick={handleComplete}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow"
-              >
-                Completed
-              </button>
-
-              <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow cursor-pointer">
-                Upload Resume
+            <div className="flex gap-4 mt-6 flex-wrap">
+              <label className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer">
+                Upload Resumes
                 <input
                   type="file"
+                  multiple
                   accept=".pdf,.doc,.docx"
-                  onChange={handleResumeUpload}
                   className="hidden"
+                  onChange={handleResumeUpload}
                 />
               </label>
+
+              <button
+                onClick={handleViewCandidates}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                View Candidates
+              </button>
             </div>
           </div>
         ) : (
-          <div className="text-[#dfd0b8] text-center mt-20 text-lg">
-            No job selected.
-          </div>
+          <p>No job selected.</p>
         )}
-      </div>
+      </main>
     </div>
   );
-}
+};
 
 export default SubVendorDashboard;

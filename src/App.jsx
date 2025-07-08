@@ -110,6 +110,7 @@ import Reports from "./components/Reports";
 import PrivateRoute from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SubStudentList from "./pages/SubStudentList"; // or your path
 
 function App() {
   return (
@@ -125,7 +126,7 @@ function App() {
         <Route path="/jobpost" element={<Jobpost />} />
 
         {/* Protected Routes */}
-        <Route element={<PrivateRoute />}>
+        {/* <Route element={<PrivateRoute />}> */}
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
           <Route path="/vendor-jobs" element={<VendorJobInbox />} />
           <Route path="/vendor-reports" element={<Reports />} />
@@ -133,7 +134,8 @@ function App() {
           <Route path="/subvendor-dashboard" element={<SubVendorDashboard />} />
           <Route path="/subvendor-list" element={<SubVendorList />} />
           <Route path="/upload" element={<FileUpload />} />
-        </Route>
+          <Route path="/sub-students" element={<SubStudentList />} />
+        {/* </Route> */}
       </Routes>
     </>
   );

@@ -1,55 +1,41 @@
-// src/hooks/useJobDescription.js
+// hooks/useJobDescription.js
 import { useState } from "react";
-import { generateJobDescriptionAPI } from "../services/jdService";
 
 export const useJobDescription = () => {
   const [generatedDesc, setGeneratedDesc] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const generateJD = async ({
-    organization_name,
-    job_industry,
-    job_title,
-    skills,
-    job_location,
-    ctc,
-    eligibility_criteria,
-    requirements,
-    email,
-  }) => {
+  const generateJD = async (formData) => {
     setLoading(true);
     setError("");
-
     try {
-      const description = await generateJobDescriptionAPI({
-        organization_name,
-        job_industry,
-        job_title,
-        skills,
-        job_location,
-        ctc,
-        eligibility_criteria,
-        requirements,
-        email,
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/generate-jd/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
-      setGeneratedDesc(description || "No description returned.");
+      if (!response.ok) {
+        throw new Error("Failed to generate job description.");
+      }
+
+      const data = await response.json();
+      setGeneratedDesc(data.generated_jd || "");
     } catch (err) {
-      setError(err.message || "Failed to generate job description.");
-      setGeneratedDesc("Failed to generate job description.");
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
 
-  return { generatedDesc, loading, error, generateJD };
+  const resetJD = () => setGeneratedDesc(""); // ✅ clears on post
+
+  return {
+    generatedDesc,
+    loading,
+    error,
+    generateJD,
+    resetJD,
+  };
 };
-
-
-
-
-
-
-
-
