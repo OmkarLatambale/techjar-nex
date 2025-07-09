@@ -45,6 +45,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ Add loading state
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -53,10 +54,10 @@ export const AuthProvider = ({ children }) => {
     if (token && user) {
       setAuth({ token, user: JSON.parse(user) });
     }
+    setLoading(false); // ✅ Finish loading after checking localStorage
   }, []);
 
   const login = ({ token, user }) => {
-    localStorage.removeItem("token");
     localStorage.setItem("authToken", token);
     localStorage.setItem("authUser", JSON.stringify(user));
     setAuth({ token, user });
@@ -72,10 +73,11 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         auth,
-        token: auth?.token ?? null,     // ✅ expose token directly
-        user: auth?.user ?? null,       // ✅ expose user directly
+        token: auth?.token ?? null,
+        user: auth?.user ?? null,
         login,
         logout,
+        loading, // ✅ expose loading state
       }}
     >
       {children}

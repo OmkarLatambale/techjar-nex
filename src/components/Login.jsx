@@ -113,7 +113,11 @@ function Login() {
 
     if (res.status === 200) {
       toast.success("Login successful!");
-      navigate(role === "vendor" ? "/vendor-dashboard" : "/subvendor-dashboard");
+      navigate(
+        role === "vendor" ? "/vendor-dashboard" : "/subvendor-dashboard"
+      );
+    } else if (res.status === 403) {
+      toast.error("You are not authorized to login as this role.");
     } else {
       toast.error(res.data.message || "Login failed");
     }
@@ -131,14 +135,16 @@ function Login() {
         </div>
 
         <h2 className="text-center text-lg sm:text-xl font-semibold text-[#DFD0B8]">
-          Login as {role === "vendor" ? "Vendor" : "Sub-Vendor"}
+          Login as <span className="capitalize">{role.replace("-", " ")}</span>
         </h2>
 
         <div className="flex items-center justify-center bg-[#393E46] rounded-full p-1 border border-[#948979] text-sm sm:text-base">
           <button
             onClick={() => setRole("vendor")}
             className={`w-1/2 px-3 py-1.5 rounded-full font-medium transition-all duration-300 ${
-              role === "vendor" ? "bg-[#222831] text-[#DFD0B8]" : "text-[#948979]"
+              role === "vendor"
+                ? "bg-[#222831] text-[#DFD0B8]"
+                : "text-[#948979]"
             }`}
           >
             Vendor
@@ -146,7 +152,9 @@ function Login() {
           <button
             onClick={() => setRole("sub-vendor")}
             className={`w-1/2 px-3 py-1.5 rounded-full font-medium transition-all duration-300 ${
-              role === "sub-vendor" ? "bg-[#222831] text-[#DFD0B8]" : "text-[#948979]"
+              role === "sub-vendor"
+                ? "bg-[#222831] text-[#DFD0B8]"
+                : "text-[#948979]"
             }`}
           >
             Sub-Vendor

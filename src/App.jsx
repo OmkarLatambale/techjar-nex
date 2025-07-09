@@ -110,9 +110,20 @@ import Reports from "./components/Reports";
 import PrivateRoute from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SubStudentList from "./pages/SubStudentList"; // or your path
+import SubStudentList from "./pages/SubStudentList";
+import { useAuth } from "./context/AuthContext";  // or your path
 
 function App() {
+  const { loading } = useAuth(); // ✅ get loading state
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#222831] text-[#DFD0B8] text-xl">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <>
       <ToastContainer position="top-center" autoClose={2000} />
@@ -126,7 +137,7 @@ function App() {
         <Route path="/jobpost" element={<Jobpost />} />
 
         {/* Protected Routes */}
-        {/* <Route element={<PrivateRoute />}> */}
+        <Route element={<PrivateRoute />}>
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
           <Route path="/vendor-jobs" element={<VendorJobInbox />} />
           <Route path="/vendor-reports" element={<Reports />} />
@@ -135,7 +146,7 @@ function App() {
           <Route path="/subvendor-list" element={<SubVendorList />} />
           <Route path="/upload" element={<FileUpload />} />
           <Route path="/sub-students" element={<SubStudentList />} />
-        {/* </Route> */}
+        </Route>
       </Routes>
     </>
   );
