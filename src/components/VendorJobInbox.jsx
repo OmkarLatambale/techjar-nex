@@ -95,24 +95,27 @@ const VendorJobInbox = () => {
 
             <div className="mt-6 flex flex-col sm:flex-row gap-4">
               <button
-                onClick={() => handleViewCandidates(selectedJob.id)}
-                className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
-              >
-                Candidate
-              </button>
-              <button
-                onClick={() => handleSendToSubvendor(selectedJob.id)}
-                className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
-              >
-                Subvendor
-              </button>
-              <button
                 onClick={() => handleUpload(selectedJob.id)}
                 className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
               >
                 Upload Resumes
               </button>
+              <button
+                onClick={() => handleViewCandidates(selectedJob.id)}
+                className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
+              >
+                Shortlisted Candidates
+              </button>
+              <button
+                onClick={() => handleSendToSubvendor(selectedJob.id)}
+                className="bg-[#1e222a] hover:bg-black text-[#DFD0B8] px-4 py-2 rounded-md w-full sm:w-auto"
+              >
+                Assign Job To Subvendor
+              </button>
             </div>
+            <p className="text-sm text-yellow-200 mt-2">
+              🔔 Upload resumes to view shortlisted candidates.
+            </p>
           </>
         ) : (
           <p className="text-gray-400 text-center md:text-left">

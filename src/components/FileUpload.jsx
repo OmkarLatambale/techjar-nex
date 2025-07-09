@@ -73,10 +73,10 @@
 
 // export default FileUpload;
 
-// src/pages/FileUpload.jsx
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useFileUpload from "../hooks/useFileUpload";
+import { toast } from "react-toastify";
 
 function FileUpload() {
   const location = useLocation();
@@ -100,7 +100,20 @@ function FileUpload() {
     const success = await handleUpload(selectedFiles, jobId);
 
     if (success) {
-      navigate("/vendor-jobs", { state: { jobId: jobId, jobData } });
+      toast.success("Resume Uploaded Successfully", {
+        position: "top-center",
+        autoClose: 2000,
+        theme: "dark",
+        style: {
+          background: "#222831",
+          color: "#dfd0b8",
+          border: "1px solid #dfd0b8",
+        },
+      });
+
+      setTimeout(() => {
+        navigate("/vendor-jobs", { state: { jobId, jobData } });
+      }, 2100);
     }
   };
 

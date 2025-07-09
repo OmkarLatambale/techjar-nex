@@ -1,7 +1,7 @@
-// src/pages/SubStudentList.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const SubStudentList = () => {
   const location = useLocation();
@@ -51,51 +51,64 @@ const SubStudentList = () => {
 
   const handleCopy = (link) => {
     navigator.clipboard.writeText(link);
-    alert("Interview link copied to clipboard!");
+    toast.success("Interview link copied to clipboard!");
   };
 
-  if (loading) return <div className="text-white p-6">Loading students...</div>;
-  if (error) return <div className="text-red-400 p-6">{error}</div>;
+  if (loading)
+    return <div className="text-white p-6">Loading students...</div>;
+
+  if (error)
+    return <div className="text-red-400 p-6">{error}</div>;
 
   return (
     <div className="min-h-screen p-6 bg-[#222831] text-[#DFD0B8]">
+      {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div className="flex items-center gap-2">
           <img src="/assets/botImage.png" alt="logo" className="w-10 h-10" />
           <span className="text-2xl font-bold">NEX.AI</span>
         </div>
         <div className="text-sm text-gray-400">
-          Job ID: <span className="text-[#DFD0B8] font-semibold">{jobId}</span>
+          Job ID:{" "}
+          <span className="text-[#DFD0B8] font-semibold">{jobId}</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Student Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {students.map((student, idx) => (
           <div
             key={idx}
-            className="bg-[#2c2f36] p-4 rounded shadow-md overflow-auto"
+            className="bg-[#2c2f36] border border-[#DFD0B8]/30 p-5 rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
           >
-            <p className="font-bold text-lg">{student.name}</p>
-            <p className="text-sm">Email: {student.email}</p>
-            <p className="text-sm">Contact: {student.contact}</p>
-            <p className="text-sm">Match Score: {student.match_score}</p>
-            <p className="text-sm">Status: {student.status}</p>
+            <p className="text-lg font-semibold mb-1">{student.name}</p>
+            <p className="text-sm text-gray-300">📧 {student.email}</p>
+            <p className="text-sm text-gray-300">📞 {student.contact}</p>
+            <p className="text-sm text-gray-300">
+              🔍 Match Score: <span className="text-[#00ADB5]">{student.match_score}</span>
+            </p>
+            <p className="text-sm text-gray-300 mb-2">
+              📝 Status: <span className="text-yellow-400">{student.status}</span>
+            </p>
 
+            {/* Interview Link */}
             {student.interview_link !== "Not available" ? (
-              <div className="mt-3 text-sm break-all">
-                <p className="text-[#DFD0B8] font-semibold mb-1">Interview Link:</p>
-                <div className="bg-[#393e46] px-2 py-1 rounded">
-                  <span>{student.interview_link}</span>
+              <div className="mt-3 text-sm">
+                <p className="font-semibold mb-1 text-[#DFD0B8]">Interview Link</p>
+                <div className="bg-[#393e46] px-3 py-2 rounded relative overflow-x-auto">
+                  <span className="text-xs break-words">{student.interview_link}</span>
                   <button
-                    className="ml-2 bg-blue-500 text-white px-2 py-0.5 rounded text-xs hover:bg-blue-600"
+                    className="absolute top-2 right-2 bg-[#948979] hover:bg-[#9d8158] text-white text-xs px-2 py-1 rounded"
                     onClick={() => handleCopy(student.interview_link)}
                   >
-                    Copy
+                    Copy Link
                   </button>
                 </div>
               </div>
             ) : (
-              <p className="text-yellow-400 mt-2 text-sm">No interview link available.</p>
+              <p className="text-yellow-400 mt-2 text-sm">
+                No interview link available.
+              </p>
             )}
           </div>
         ))}

@@ -1,4 +1,3 @@
-// src/hooks/useLogin.js
 import { useState } from "react";
 import { loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
@@ -13,13 +12,31 @@ export const useLogin = () => {
     try {
       const response = await loginUser({ email, password, role });
 
-      const { access, refresh, email: userEmail, username, role: userRole } = response;
+      const {
+        access,
+        refresh,
+        email: userEmail,
+        username,
+        role: userRole,
+      } = response;
 
       if (!access) {
         return { status: 401, data: { message: "Invalid credentials" } };
       }
 
-      // Save in context
+      // ✅ Normalize roles: 'sub-vendor' vs 'subvendor'
+      const normalize = (r) => r?.toLowerCase().replace(/-/g, "");
+
+      if (normalize(userRole) !== normalize(role)) {
+        return {
+          status: 403,
+          data: {
+            message: `Unauthorized login. You are registered as '${userRole}', not '${role}'.`,
+          },
+        };
+      }
+
+      // ✅ Save in auth context
       setAuth({
         token: access,
         refreshToken: refresh,

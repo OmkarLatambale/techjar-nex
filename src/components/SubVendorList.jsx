@@ -116,7 +116,7 @@ function SubVendorList() {
       const localKey = `subVendorJobs_${subvendorId}`;
       const existing = JSON.parse(localStorage.getItem(localKey)) || [];
       localStorage.setItem(localKey, JSON.stringify([...existing, job]));
-      toast.success(`Assigned job "${job.title}" to subvendor.`);
+      toast.success(`Assigned job "${job.job_title}" to subvendor.`);
     } catch  {
       toast.error("Failed to assign job.");
     }
@@ -136,7 +136,7 @@ function SubVendorList() {
         const prev = JSON.parse(localStorage.getItem(key)) || [];
         localStorage.setItem(key, JSON.stringify([...prev, job]));
       });
-      toast.success("Job assigned to all subvendors.");
+     toast.success(`Assigned job "${job.job_title}" to all subvendors.`);
     } catch  {
       toast.error("Assignment to all failed.");
     }

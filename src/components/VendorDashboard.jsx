@@ -102,7 +102,7 @@
 // export default VendorDashboard;
 
 // src/components/VendorDashboard.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { fetchKPIs } from "../services/kpiService";
 import { uploadSubvendor } from "../services/subvendorService";
 import { useSubvendors } from "../hooks/useSubvendors";
@@ -110,7 +110,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { UserRound } from "lucide-react";
+import { UserRound, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
 
 const VendorDashboard = () => {
@@ -135,6 +135,9 @@ const VendorDashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const { subvendors, fetchSubvendors } = useSubvendors();
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef();
+
   useEffect(() => {
     const loadKPIs = async () => {
       if (!token) return;
@@ -145,10 +148,19 @@ const VendorDashboard = () => {
         console.error("Failed to fetch KPIs:", error);
       }
     };
-
     loadKPIs();
     // fetchSubvendors(token);
   }, [token]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleInputChange = (e) => {
     setSubvendor({ ...subvendor, [e.target.name]: e.target.value });
@@ -161,7 +173,6 @@ const VendorDashboard = () => {
       toast.success("Subvendor added successfully");
       setSubvendor({ name: "", email: "", password: "" });
       setShowModal(false);
-      // fetchSubvendors(token);
     } catch (err) {
       toast.error("Error adding subvendor");
       console.error(err);
@@ -183,9 +194,10 @@ const VendorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 sm:p-8 overflow-x-hidden">
+    <div className="min-h-screen bg-[#1e222a] text-[#DFD0B8] p-4 sm:p-6 lg:p-8 overflow-x-hidden">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10 animate-fade-in gap-4 sm:gap-0">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+        {/* Logo */}
         <div className="flex items-center gap-3">
           <motion.img
             initial={{ scale: 0 }}
@@ -205,14 +217,15 @@ const VendorDashboard = () => {
           </motion.span>
         </div>
 
-        <div className="flex items-center gap-4 sm:gap-6">
+        {/* Action Buttons */}
+        <div className="flex flex-wrap justify-center sm:justify-end items-center gap-2 sm:gap-4 w-full sm:w-auto">
           {["/vendor-jobs", "/vendor-reports"].map((route, idx) => (
             <motion.button
               key={idx}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(route)}
-              className="border px-3 py-1 rounded-md w-28 sm:w-36 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
+              className="border px-5 py-2 rounded-md min-w-[120px] text-base font-medium hover:bg-[#DFD0B8] hover:text-[#1e222a] transition"
             >
               {route.includes("jobs") ? "Jobs" : "Reports"}
             </motion.button>
@@ -221,23 +234,33 @@ const VendorDashboard = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="border px-3 py-1 rounded-md w-28 sm:w-36 cursor-pointer hover:bg-[#DFD0B8] hover:text-[#1e222a] transition text-sm sm:text-base"
+            className="border px-5 py-2 rounded-md min-w-[120px] text-base font-medium hover:bg-[#DFD0B8] hover:text-[#1e222a] transition"
             onClick={() => setShowModal(true)}
           >
             Add Subvendor
           </motion.button>
-
-          <div className="relative group">
+          {/* Profile Dropdown */}
+          <div ref={dropdownRef} className="relative z-50">
             <motion.div
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="flex items-center gap-1 sm:gap-2 text-base sm:text-lg font-semibold cursor-pointer select-none"
+              className="flex items-center gap-2 font-semibold cursor-pointer select-none"
+              onClick={() => setDropdownOpen((prev) => !prev)}
             >
               Hi, Vendor
-              <UserRound className="w-5 h-5 sm:w-6 sm:h-6" />
+              <UserRound className="w-5 h-5" />
+              <ChevronDown size={16} />
             </motion.div>
-            <div className="absolute right-0 mt-2 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 invisible">
-              <div onClick={handleLogout} className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer text-sm">
+
+            <div
+              className={`absolute right-0 mt-2 w-32 bg-[#2c2f36] text-[#DFD0B8] border border-[#DFD0B8] rounded-md shadow-md transition-all duration-200 ${
+                dropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
+              }`}
+            >
+              <div
+                onClick={handleLogout}
+                className="px-4 py-2 hover:bg-[#3c4049] cursor-pointer text-sm"
+              >
                 Logout
               </div>
             </div>
@@ -245,9 +268,10 @@ const VendorDashboard = () => {
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="flex justify-between items-start mt-10 flex-wrap gap-10">
-        <div className="flex flex-col gap-6 w-72 mx-auto">
+      {/* KPI Cards and Image */}
+      <div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-10 mt-8">
+        {/* KPI Cards */}
+        <div className="flex flex-col gap-6 w-full max-w-xs sm:max-w-sm lg:ml-32">
           {Object.entries(kpis).map(([label, value], index) => (
             <motion.div
               key={index}
@@ -255,20 +279,23 @@ const VendorDashboard = () => {
               initial="hidden"
               animate="visible"
               variants={cardVariants}
-              className="border border-[#DFD0B8] p-5 sm:p-6 text-center rounded-md hover:shadow-xl hover:scale-105 transition-all duration-300 bg-[#2c303a] backdrop-blur-md w-full"
+              className="border border-[#DFD0B8] p-5 sm:p-6 text-center rounded-md hover:shadow-xl hover:scale-105 transition-all duration-300 bg-[#2c303a]"
               style={{ boxShadow: "0 0 12px rgba(223, 208, 184, 0.3)" }}
             >
-              <div className="text-xs sm:text-sm mb-2 capitalize">{label.replaceAll("_", " ")}</div>
+              <div className="text-xs sm:text-sm mb-2 capitalize">
+                {label.replaceAll("_", " ")}
+              </div>
               <div className="text-2xl sm:text-3xl font-bold">{value}</div>
             </motion.div>
           ))}
         </div>
 
+        {/* Image */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5 }}
-          className="w-full lg:w-1/2 max-w-md"
+          className="w-full max-w-md"
         >
           <img
             src="/assets/1.png"
@@ -284,9 +311,16 @@ const VendorDashboard = () => {
           <h3 className="text-lg sm:text-xl font-bold mb-4">Subvendors</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {subvendors.map((sv, i) => (
-              <div key={i} className="bg-[#2c303a] border border-[#DFD0B8] p-4 rounded">
-                <p><strong>Name:</strong> {sv.name}</p>
-                <p><strong>Email:</strong> {sv.email}</p>
+              <div
+                key={i}
+                className="bg-[#2c303a] border border-[#DFD0B8] p-4 rounded"
+              >
+                <p>
+                  <strong>Name:</strong> {sv.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {sv.email}
+                </p>
               </div>
             ))}
           </div>
@@ -295,9 +329,11 @@ const VendorDashboard = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#222831] bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#2c2f36] border border-[#DFD0B8] rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-lg font-bold mb-4 text-center">Add Subvendor</h2>
+            <h2 className="text-lg font-bold mb-4 text-center">
+              Add Subvendor
+            </h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               {["name", "email", "password"].map((field) => (
                 <input
@@ -306,17 +342,25 @@ const VendorDashboard = () => {
                   name={field}
                   value={subvendor[field]}
                   onChange={handleInputChange}
-                  placeholder={`Subvendor ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                  placeholder={`Subvendor ${field
+                    .charAt(0)
+                    .toUpperCase()}${field.slice(1)}`}
                   required
                   className="p-2 rounded bg-[#1e222a] text-[#DFD0B8] border border-[#DFD0B8]"
                 />
               ))}
-
               <div className="flex justify-end gap-2">
-                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 rounded bg-gray-600 text-white hover:bg-gray-700">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 rounded bg-gray-600 text-white hover:bg-gray-700"
+                >
                   Cancel
                 </button>
-                <button type="submit" className="px-4 py-2 rounded bg-[#DFD0B8] text-[#1e222a] hover:bg-[#c0ae92]">
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded bg-[#DFD0B8] text-[#1e222a] hover:bg-[#c0ae92]"
+                >
                   Submit
                 </button>
               </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const StudentList = () => {
   const location = useLocation();
@@ -50,27 +51,130 @@ const StudentList = () => {
   }, [jobId, API_URL, token]);
 
   const handleSendMail = async (matchResultId, email) => {
-    try {
-      await axios.post(
-        `${API_URL}/jobs/send-email/?id=${matchResultId}`,
-        {},
+  try {
+    await axios.post(
+      `${API_URL}/jobs/send-email/?id=${matchResultId}`,
+      { email },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    toast.success(`Mail sent to ${email}`, {
+      position: "top-center",
+      autoClose: 2000,
+      style: {
+        background: "#222831",
+        color: "#dfd0b8",
+        border: "1px solid #dfd0b8",
+      },
+    });
+  } catch (error) {
+    const message =
+      error.response?.data?.error || "Failed to send email";
+
+    if (message === "Interview email already sent") {
+      toast.info(`Mail already sent to ${email}`, {
+        position: "top-center",
+        autoClose: 2000,
+        style: {
+          background: "#222831",
+          color: "#dfd0b8",
+          border: "1px solid #dfd0b8",
+        },
+      });
+    } else {
+      toast.error(`Failed to send email to ${email}`, {
+        position: "top-center",
+        autoClose: 2000,
+        style: {
+          background: "#222831",
+          color: "#dfd0b8",
+          border: "1px solid #dfd0b8",
+        },
+      });
+    }
+
+    console.error("Failed to send email", error);
+  }
+};
+
+
+  const handleSendMailToAll = async () => {
+  const shortlistedStudents = students.filter((s) =>
+    ["shortlisted", "strong Match"].includes(s.status)
+  );
+
+  if (shortlistedStudents.length === 0) {
+    toast.info("No eligible students to send email.", {
+      position: "top-center",
+      autoClose: 3000,
+      style: {
+        background: "#222831",
+        color: "#dfd0b8",
+        border: "1px solid #dfd0b8",
+      },
+    });
+    return;
+  }
+
+  const results = await Promise.allSettled(
+    shortlistedStudents.map((student) =>
+      axios.post(
+        `${API_URL}/jobs/send-email/?id=${student.id}`,
+        { email: student.email },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      alert(`Mail sent to ${email}`);
-    } catch (error) {
-      console.error("Failed to send email", error);
-      alert(`Failed to send email to ${email}`);
-    }
-  };
+      )
+    )
+  );
 
-  const handleSendMailToAll = () => {
-    const allEmails = students.map((s) => s.email).join(", ");
-    alert(`Mail sent to all: ${allEmails}`);
-  };
+  results.forEach((result, index) => {
+    const student = shortlistedStudents[index];
+
+    if (result.status === "fulfilled") {
+      toast.success(`Mail sent to ${student.email}`, {
+        position: "top-center",
+        autoClose: 2000,
+        style: {
+          background: "#222831",
+          color: "#dfd0b8",
+          border: "1px solid #dfd0b8",
+        },
+      });
+    } else {
+      const errorMessage =
+        result.reason?.response?.data?.error || "Failed to send email";
+
+      if (errorMessage === "Interview email already sent") {
+        toast.info(`Mail already sent to ${student.email}`, {
+          position: "top-center",
+          autoClose: 2000,
+          style: {
+            background: "#222831",
+            color: "#dfd0b8",
+            border: "1px solid #dfd0b8",
+          },
+        });
+      } else {
+        toast.error(`Failed to send mail to ${student.email}`, {
+          position: "top-center",
+          autoClose: 2000,
+          style: {
+            background: "#222831",
+            color: "#dfd0b8",
+            border: "1px solid #dfd0b8",
+          },
+        });
+      }
+    }
+  });
+};
+
 
   if (loading) return <div className="text-white p-6">Loading students...</div>;
   if (error) return <div className="text-red-400 p-6">{error}</div>;
@@ -85,7 +189,7 @@ const StudentList = () => {
         <div className="flex gap-4">
           <button
             onClick={handleSendMailToAll}
-            className="bg-[#393e46] px-4 py-2 rounded-md hover:bg-[#555]"
+            className="bg-[#1e222a] text-[#DFD0B8] px-4 py-2 rounded-md hover:bg-black transition"
           >
             Send All
           </button>
@@ -110,7 +214,7 @@ const StudentList = () => {
               {["shortlisted", "strong Match"].includes(student.status) ? (
                 <button
                   onClick={() => handleSendMail(student.id, student.email)}
-                  className="mt-2 bg-[#00ADB5] text-white px-3 py-1 rounded hover:bg-[#008891]"
+                  className="bg-[#1e222a] text-[#DFD0B8] px-3 py-1 rounded hover:bg-black transition"
                 >
                   Send Mail
                 </button>
