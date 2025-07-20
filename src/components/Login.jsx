@@ -113,6 +113,7 @@ function Login() {
 
     if (res.status === 200) {
       toast.success("Login successful!");
+      setPassword(""); 
       navigate(
         role === "vendor" ? "/vendor-dashboard" : "/subvendor-dashboard"
       );
@@ -164,7 +165,7 @@ function Login() {
         <div className="space-y-4">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2.5 bg-[#2b2f38] rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#948979] text-sm sm:text-base"
